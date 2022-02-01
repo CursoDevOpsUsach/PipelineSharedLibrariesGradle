@@ -60,7 +60,7 @@ def call(Map pipelineParameters){
                 //- {nombreRepo}-{rama}-{numeroEjecucion} ejemplo:
                 //- ms-iclab-feature-estadomundial(Si está usando el CRUD ms-iclab-feature-[nombre de su crud])
                 steps {
-                    withSonarQubeEnv('SonarQubeServer') {
+                    withSonarQubeEnv('sonarqube') {
                         sh "echo 'SonarQube'"
                         sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=covid-devops'
                     }
