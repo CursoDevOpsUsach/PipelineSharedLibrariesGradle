@@ -50,6 +50,7 @@ def call(Map pipelineParameters){
             stage("3 Build jar"){
             //- Generar artefacto del código compilado.
                 steps {
+                    error("Build failed because of this and that..")
                     sh "echo 'Build .Jar!'"
                     // Run Maven on a Unix agent.
                     //sh "mvn clean package -e"
