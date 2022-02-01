@@ -92,7 +92,7 @@ def call(Map pipelineParameters){
                     sh "echo 'gitCreateRelease'"
                     sh '''
                     git checkout -b test-crearRama2
-                    git push remote test-crearRama2 
+                    git push origin test-crearRama2 
                     '''  
                     //solo cuando es develop debo crear rama release.
 
