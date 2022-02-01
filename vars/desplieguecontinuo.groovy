@@ -32,13 +32,13 @@ def call(Map pipelineParameters){
 //                    sh 'nohup java -jar DevOpsUsach2020-$VERSION.jar & >/dev/null'
 //                }
 //            }
-            stage("9: test"){
-                //- Realizar llamado a microservicio expuesto en local para cada uno de sus
-                //métodos y mostrar los resultados.
-                steps {
-                    sh "sleep 30 && curl -X GET 'http://localhost:8081/rest/mscovid/test?msg=testing'"
-                }
-            }
+//            stage("9: test"){
+//                //- Realizar llamado a microservicio expuesto en local para cada uno de sus
+//                //métodos y mostrar los resultados.
+//                steps {
+//                    sh "sleep 30 && curl -X GET 'http://localhost:8081/rest/mscovid/test?msg=testing'"
+//                }
+//            }
             stage("9: gitMergeMaster"){
                 //- Realizar merge directo hacia la rama master.
                 //- Ejecutar sólo si todo lo demás resulta de forma exitosa.
