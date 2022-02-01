@@ -43,7 +43,10 @@ def call(Map pipelineParameters){
                 //- Realizar merge directo hacia la rama master.
                 //- Ejecutar sólo si todo lo demás resulta de forma exitosa.
                 steps {
-                    sh "echo 'gitMergeMaster'"
+                      sh '''
+                      echo 'gitDiff'
+                      git merge origin/test-crearRama release-v1-0-0
+                      '''
                 }
             }
             stage("10: gitMergeDevelop"){
@@ -63,10 +66,10 @@ def call(Map pipelineParameters){
         }
         post{
             success{
-                slackSend color: 'good', message: "[mcontreras] [${JOB_NAME}] [${BUILD_TAG}] Ejecucion Exitosa", teamDomain: 'dipdevopsusac-tr94431', tokenCredentialId: 'slacksecret'
+                    slackSend color: 'good', message: "[Grupo5][${jobconsolename}][${env.BRANCH_NAME}][Stage: ${BUILD_ID}][Resultado: Ok]", teamDomain: 'dipdevopsusac-tr94431', tokenCredentialId: 'slack-duribef'
             }
             failure{
-                slackSend color: 'danger', message: "[mcontreras] [${JOB_NAME}] [${BUILD_TAG}] Ejecucion fallida en stage [${BUILD_ID}]", teamDomain: 'dipdevopsusac-tr94431', tokenCredentialId: 'slacksecret'
+                    slackSend color: 'danger', message: "[Grupo5][${jobconsolename}][${env.BRANCH_NAME}][Stage: ${BUILD_ID}][Resultado: No OK]", teamDomain: 'dipdevopsusac-tr94431', tokenCredentialId: 'slack-duribef'
             }
         }
     }
