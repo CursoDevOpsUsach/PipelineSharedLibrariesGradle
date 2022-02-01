@@ -13,7 +13,10 @@ def call(Map pipelineParameters){
                 //- Mostrar por pantalla las diferencias entre la rama release en curso y la rama
                 //master.(Opcional)
                 steps {
-                    sh "echo 'gitDiff'"
+                      sh '''
+                      echo 'gitDiff'
+                      git diff main release-v1-0-0 
+                      '''
                 }
             }
             stage("8: nexusDownload"){
