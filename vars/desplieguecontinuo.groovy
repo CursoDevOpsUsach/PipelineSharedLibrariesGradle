@@ -1,5 +1,6 @@
 def call(Map pipelineParameters){
-      
+    def jobnameparts = JOB_NAME.tokenize('/') as String[]
+    def jobconsolename = jobnameparts[0]     
     pipeline {
         agent any
         environment{
@@ -43,10 +44,12 @@ def call(Map pipelineParameters){
                 //- Realizar merge directo hacia la rama master.
                 //- Ejecutar sólo si todo lo demás resulta de forma exitosa.
                 steps {
-                      sh '''
-                      echo 'gitDiff'
-                      git merge origin/test-crearRama release-v1-0-0
-                      '''
+                    withCredentials([gitUsernamePassword(credentialsId: 'github-token')]) {
+                            sh '''
+                            echo 'gitMergeMaster'
+                            git merge origin/test-crearRama release-v1-0-0
+                            '''
+                    }
                 }
             }
             stage("10: gitMergeDevelop"){
