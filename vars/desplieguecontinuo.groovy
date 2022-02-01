@@ -47,8 +47,9 @@ def call(Map pipelineParameters){
                     withCredentials([gitUsernamePassword(credentialsId: 'github-token')]) {
                             sh '''
                             echo 'gitMergeMaster'
-                            git merge origin/test-crearRama release-v1-0-0
-                            git push origin/test-crearRama
+                            git checkout origin/test-crearRama
+                            git merge release-v1-0-0
+                            git push origin test-crearRama
                             '''
                     }
                 }
