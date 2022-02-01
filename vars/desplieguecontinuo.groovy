@@ -40,21 +40,21 @@ def call(Map pipelineParameters){
 //                    sh "sleep 30 && curl -X GET 'http://localhost:8081/rest/mscovid/test?msg=testing'"
 //                }
 //            }
-            stage("9: gitMergeMaster"){
-                //- Realizar merge directo hacia la rama master.
-                //- Ejecutar sólo si todo lo demás resulta de forma exitosa.
-                steps {
-                    withCredentials([gitUsernamePassword(credentialsId: 'github-token')]) {
-                            sh '''
-                            echo 'gitMergeMaster'
-                            git checkout origin/test-crearRama
-                            git merge release-v1-0-0
-                            git commit -am "Merged release-v1-0-0 branch to test-crearRama"
-                            git push origin HEAD:test-crearRama
-                            '''
-                    }
-                }
-            }
+//            stage("9: gitMergeMaster"){
+//                //- Realizar merge directo hacia la rama master.
+//                //- Ejecutar sólo si todo lo demás resulta de forma exitosa.
+//                steps {
+//                    withCredentials([gitUsernamePassword(credentialsId: 'github-token')]) {
+//                            sh '''
+//                            echo 'gitMergeMaster'
+//                            git checkout origin/test-crearRama
+//                            git merge release-v1-0-0
+//                            git commit -am "Merged release-v1-0-0 branch to test-crearRama"
+//                            git push origin HEAD:test-crearRama
+ //                           '''
+//                    }
+//                }
+//            }
             stage("10: gitMergeDevelop"){
                 //- Realizar merge directo hacia rama develop.
                 //- Ejecutar sólo si todo lo demás resulta de forma exitosa
