@@ -19,19 +19,19 @@ def call(Map pipelineParameters){
                       '''
                 }
             }
-            stage("8: nexusDownload"){
-                //- Descargar el artefacto creado al workspace de la ejecución del pipeline.
-                steps {                   
-                    sh 'sleep 5 '
-                    sh 'curl -X GET -u $NEXUS_USER:$NEXUS_PASSWORD http://nexus:8081/repository/devops-usach-nexus/com/devopsusach2020/DevOpsUsach2020/$VERSION/DevOpsUsach2020-$VERSION.jar -O'
-                }
-            }
-            stage("9: run"){
-                //- Ejecutar artefacto descargado.
-                steps {
-                    sh 'nohup java -jar DevOpsUsach2020-$VERSION.jar & >/dev/null'
-                }
-            }
+//            stage("8: nexusDownload"){
+//                //- Descargar el artefacto creado al workspace de la ejecución del pipeline.
+//                steps {                   
+//                    sh 'sleep 5 '
+//                    sh 'curl -X GET -u $NEXUS_USER:$NEXUS_PASSWORD http://nexus:8081/repository/devops-usach-nexus/com/devopsusach2020/DevOpsUsach2020/$VERSION/DevOpsUsach2020-$VERSION.jar -O'
+//                }
+//            }
+//            stage("9: run"){
+//                //- Ejecutar artefacto descargado.
+//                steps {
+//                    sh 'nohup java -jar DevOpsUsach2020-$VERSION.jar & >/dev/null'
+//                }
+//            }
             stage("9: test"){
                 //- Realizar llamado a microservicio expuesto en local para cada uno de sus
                 //métodos y mostrar los resultados.
