@@ -90,10 +90,12 @@ def call(Map pipelineParameters){
                 }
                 steps {
                     sh "echo 'gitCreateRelease'"
-                    sh '''
-                    git checkout -b test-crearRama2
-                    git push origin test-crearRama2 
-                    '''  
+                    withCredentials([gitUsernamePassword(credentialsId: 'github-token')]) {
+                            sh '''
+                            git checkout -b test-crearRama
+                            git push origin test-crearRama 
+                            '''
+                    }
                     //solo cuando es develop debo crear rama release.
 
 
