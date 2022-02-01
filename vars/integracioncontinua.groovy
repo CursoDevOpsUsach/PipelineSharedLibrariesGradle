@@ -104,10 +104,10 @@ def call(Map pipelineParameters){
         }
         post{
             success{
-                slackSend color: 'good', message: "[mcontreras] [${JOB_NAME}] [${BUILD_TAG}] Ejecucion Exitosa", teamDomain: 'dipdevopsusac-tr94431', tokenCredentialId: 'slacksecret'
+                    slackSend color: 'good', message: "[Grupo5][${JOB_NAME}][env.BRANCH_NAME][Stage: ${BUILD_ID}][Resultado: Ok]", teamDomain: 'dipdevopsusac-tr94431', tokenCredentialId: 'slack-duribef'
             }
             failure{
-                slackSend color: 'danger', message: "[mcontreras] [${JOB_NAME}] [${BUILD_TAG}] Ejecucion fallida en stage [${BUILD_ID}]", teamDomain: 'dipdevopsusac-tr94431', tokenCredentialId: 'slacksecret'
+                    slackSend color: 'danger', message: "[Grupo5][${JOB_NAME}][env.BRANCH_NAME][Stage: ${BUILD_ID}][Resultado: No OK]", teamDomain: 'dipdevopsusac-tr94431', tokenCredentialId: 'slack-duribef'
             }
         }
     }
