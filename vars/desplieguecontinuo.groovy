@@ -10,16 +10,16 @@ def call(Map pipelineParameters){
             FINAL_VERSION = '1.0.0'
         }
         stages{
-            stage("7: gitDiff"){
-                //- Mostrar por pantalla las diferencias entre la rama release en curso y la rama
-                //master.(Opcional)
-                steps {
-                      sh '''
-                      echo 'gitDiff'
+//            stage("7: gitDiff"){
+//                //- Mostrar por pantalla las diferencias entre la rama release en curso y la rama
+//                //master.(Opcional)
+//                steps {
+//                      sh '''
+//                      echo 'gitDiff'
 //                      git diff release-v1-0-0 origin/main
-                      '''
-                }
-            }
+//                      '''
+//                }
+//            }
 //            stage("8: nexusDownload"){
 //                //- Descargar el artefacto creado al workspace de la ejecución del pipeline.
 //                steps {                   
