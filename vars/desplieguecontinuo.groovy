@@ -49,7 +49,8 @@ def call(Map pipelineParameters){
                             echo 'gitMergeMaster'
                             git checkout origin/test-crearRama
                             git merge release-v1-0-0
-                            git push origin test-crearRama
+                            git commit -am "Merged release-v1-0-0 branch to test-crearRama"
+                            git push origin HEAD:test-crearRama
                             '''
                     }
                 }
