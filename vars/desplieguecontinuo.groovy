@@ -15,7 +15,7 @@ def call(Map pipelineParameters){
                 steps {
                       sh '''
                       echo 'gitDiff'
-                      git diff main release-v1-0-0 
+                      git diff release-v1-0-0 origin/main
                       '''
                 }
             }
