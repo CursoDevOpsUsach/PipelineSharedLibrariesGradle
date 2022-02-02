@@ -1,6 +1,4 @@
 def call(Map pipelineParameters){
-    def jobnameparts = JOB_NAME.tokenize('/') as String[]
-    def jobconsolename = jobnameparts[0]     
     pipeline {
         agent any
         environment{
@@ -72,10 +70,10 @@ def call(Map pipelineParameters){
         }
         post{
             success{
-                    slackSend color: 'good', message: "[Grupo5][${jobconsolename}][${env.BRANCH_NAME}][Stage: ${BUILD_ID}][Resultado: Ok]", teamDomain: 'dipdevopsusac-tr94431', tokenCredentialId: 'slack-duribef'
+                    slackSend color: 'good', message: "[Grupo5][PIPELINE IC][${env.BRANCH_NAME}][Stage: ${BUILD_ID}][Resultado: Ok]", teamDomain: 'dipdevopsusac-tr94431', tokenCredentialId: 'slack-duribef'
             }
             failure{
-                    slackSend color: 'danger', message: "[Grupo5][${jobconsolename}][${env.BRANCH_NAME}][Stage: ${BUILD_ID}][Resultado: No OK]", teamDomain: 'dipdevopsusac-tr94431', tokenCredentialId: 'slack-duribef'
+                    slackSend color: 'danger', message: "[Grupo5][PIPELINE IC][${env.BRANCH_NAME}][Stage: ${BUILD_ID}][Resultado: No OK]", teamDomain: 'dipdevopsusac-tr94431', tokenCredentialId: 'slack-duribef'
             }
         }
     }
