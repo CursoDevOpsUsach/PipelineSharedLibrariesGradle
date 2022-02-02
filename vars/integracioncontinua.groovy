@@ -11,7 +11,7 @@ def call(Map pipelineParameters){
             stage("-1 logs"){
                 steps {
                     sh "echo 'branchname: '" + BRANCH_NAME
-                    sh 'printenv'
+                    //sh 'printenv'
                 }
             }
 
