@@ -6,7 +6,6 @@ def call(Map pipelineParameters){
             NEXUS_PASSWORD = credentials('passnexusadmin')
             VERSION = '0.0.17'
             FINAL_VERSION = '1.0.0'
-            PIPELINE_ID = "CI"
         }
         stages{
             stage("-1 logs"){
