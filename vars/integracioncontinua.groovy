@@ -4,8 +4,8 @@ def call(Map pipelineParameters) {
         environment {
             NEXUS_USER = credentials('usernexusadmin')
             NEXUS_PASSWORD = credentials('passnexusadmin')
-            VERSION = '0.0.17'
-            FINAL_VERSION = '1.0.0'
+            VERSION = '0-0-17'
+            FINAL_VERSION = '1-0-0'
         }
         stages {
             stage('-1 logs') {
@@ -94,8 +94,8 @@ def call(Map pipelineParameters) {
                     sh "echo 'gitCreateRelease'"
                     withCredentials([gitUsernamePassword(credentialsId: 'github-token')]) {
                             sh '''
-                            git checkout -b test-crearRama
-                            git push origin test-crearRama
+                            git checkout -b release/release-v$FINAL_VERSION
+                            git push origin tag v$FINAL_VERSION
                             '''
                     }
                 //solo cuando es develop debo crear rama release.
