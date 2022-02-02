@@ -58,8 +58,9 @@ def call(Map pipelineParameters) {
                 //- Cada ejecución debe tener el siguiente formato de nombre: QUE ES EL NOMBRE DE EJECUCIÓN ??
                 //- {nombreRepo}-{rama}-{numeroEjecucion} ejemplo:
                 //- ms-iclab-feature-estadomundial(Si está usando el CRUD ms-iclab-feature-[nombre de su crud])
-                sh "echo 'SonarQube'"
+
                 steps {
+                    sh "echo 'SonarQube'"
                 //                    withSonarQubeEnv('sonarqube') {
                 //                        sh "echo 'SonarQube'"
                 //                        sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=covid-devops'
