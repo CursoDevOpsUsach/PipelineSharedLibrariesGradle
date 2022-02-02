@@ -1,6 +1,4 @@
 def call(Map pipelineParameters){
-    def jobnameparts = JOB_NAME.tokenize('/') as String[]
-    def jobconsolename = jobnameparts[0]     
     pipeline {
         agent any
         environment{
@@ -8,6 +6,7 @@ def call(Map pipelineParameters){
             NEXUS_PASSWORD = credentials('passnexusadmin')
             VERSION = '0.0.17'
             FINAL_VERSION = '1.0.0'
+            PIPELINE_ID = "CI"
         }
         stages{
             stage("-1 logs"){
@@ -55,21 +54,23 @@ def call(Map pipelineParameters){
                     //sh "mvn clean package -e"
                 }
             }
-//            stage("4 SonarQube"){
-//            //- Generar análisis con sonar para cada ejecución
-//            //- Cada ejecución debe tener el siguiente formato de nombre: QUE ES EL NOMBRE DE EJECUCIÓN ??
-//                //- {nombreRepo}-{rama}-{numeroEjecucion} ejemplo:
-//                //- ms-iclab-feature-estadomundial(Si está usando el CRUD ms-iclab-feature-[nombre de su crud])
+            stage("4 SonarQube"){
+            //- Generar análisis con sonar para cada ejecución
+            //- Cada ejecución debe tener el siguiente formato de nombre: QUE ES EL NOMBRE DE EJECUCIÓN ??
+                //- {nombreRepo}-{rama}-{numeroEjecucion} ejemplo:
+                //- ms-iclab-feature-estadomundial(Si está usando el CRUD ms-iclab-feature-[nombre de su crud])
+                sh "echo 'SonarQube'"
 //                steps {
 //                    withSonarQubeEnv('sonarqube') {
 //                        sh "echo 'SonarQube'"
 //                        sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=covid-devops'
 //                    }
-//                }
-             //  post {
+                }
+               post {
                     //- Subir el artefacto creado al repositorio privado de Nexus.
                     //- Ejecutar este paso solo si los pasos anteriores se ejecutan de manera correcta.
-//                     success {
+                     success {
+                         sh "echo 'Subir a nexus'"
 //                         nexusPublisher nexusInstanceId: 'nexus', 
 //                         nexusRepositoryId: 'devops-usach-nexus', 
  //                        packages: [[$class: 'MavenPackage', 
@@ -80,9 +81,9 @@ def call(Map pipelineParameters){
 //                                             groupId: 'com.devopsusach2020', 
 //                                             packaging: 'jar', 
 //                                             version: VERSION]]]
-//                     }
-//                 }
-//             }
+                     }
+                 }
+             }
             stage("6 gitCreateRelease"){
             //- Crear rama release cuando todos los stages anteriores estén correctamente ejecutados.
             //- Este stage sólo debe estar disponible para la rama develop.
@@ -98,17 +99,15 @@ def call(Map pipelineParameters){
                             '''
                     }
                     //solo cuando es develop debo crear rama release.
-
-
                 }
             }
         }
         post{
             success{
-                    slackSend color: 'good', message: "[Grupo5][${jobconsolename}][${env.BRANCH_NAME}][Stage: ${BUILD_ID}][Resultado: Ok]", teamDomain: 'dipdevopsusac-tr94431', tokenCredentialId: 'slack-duribef'
+                    slackSend color: 'good', message: "[Grupo5][PIPELINE IC][${env.BRANCH_NAME}][Stage: ${BUILD_ID}][Resultado: Ok]", teamDomain: 'dipdevopsusac-tr94431', tokenCredentialId: 'slack-duribef'
             }
             failure{
-                    slackSend color: 'danger', message: "[Grupo5][${jobconsolename}][${env.BRANCH_NAME}][Stage: ${BUILD_ID}][Resultado: No OK]", teamDomain: 'dipdevopsusac-tr94431', tokenCredentialId: 'slack-duribef'
+                    slackSend color: 'danger', message: "[Grupo5][PIPELINE IC][${env.BRANCH_NAME}][Stage: ${BUILD_ID}][Resultado: No OK]", teamDomain: 'dipdevopsusac-tr94431', tokenCredentialId: 'slack-duribef'
             }
         }
     }
