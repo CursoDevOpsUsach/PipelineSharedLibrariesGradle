@@ -95,7 +95,7 @@ def call(Map pipelineParameters) {
                     withCredentials([gitUsernamePassword(credentialsId: 'github-token')]) {
                             sh '''
                             git checkout -b release/release-v$FINAL_VERSION
-                            git push origin tag v$FINAL_VERSION
+                            git push origin release/release-v$FINAL_VERSION
                             '''
                     }
                 //solo cuando es develop debo crear rama release.
