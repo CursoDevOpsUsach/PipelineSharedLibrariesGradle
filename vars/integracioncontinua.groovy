@@ -6,16 +6,14 @@ def call(Map pipelineParameters) {
             NEXUS_PASSWORD = credentials('passnexusadmin')
             VERSION = '0-0-17'
             FINAL_VERSION = '1-0-0'
-            STAGE = 'nada'
+            STAGE = ' '
         }
 
         stages {
             stage('-1 logs') {
                 steps {
                     sh "echo 'branchname: '" + BRANCH_NAME
-                        script {
-                            STAGE = '-1 logs '
-                        }
+                        script { STAGE = '-1 logs ' }
                 }
             }
 
@@ -38,9 +36,7 @@ def call(Map pipelineParameters) {
             stage('1 Compile') {
                 //- Compilar el código con comando maven
                 steps {
-                    script {
-                            STAGE = '1 Compile '
-                    }
+                    script { STAGE = '1 Compile ' }
                     sh "echo 'Compile Code!'"
                 // Run Maven on a Unix agent.
                 //sh "mvn clean compile -e"
@@ -58,6 +54,7 @@ def call(Map pipelineParameters) {
             stage('3 Build jar') {
                 //- Generar artefacto del código compilado.
                 steps {
+                    script { STAGE = '3 Build jar ' }
                     sh "echo 'Build .Jar!'"
                 // Run Maven on a Unix agent.
                 //sh "mvn clean package -e"
@@ -70,6 +67,7 @@ def call(Map pipelineParameters) {
                 //- ms-iclab-feature-estadomundial(Si está usando el CRUD ms-iclab-feature-[nombre de su crud])
 
                 steps {
+                    script { STAGE = '4 SonarQube ' }
                     sh "echo 'SonarQube'"
                 //                    withSonarQubeEnv('sonarqube') {
                 //                        sh "echo 'SonarQube'"
@@ -80,6 +78,7 @@ def call(Map pipelineParameters) {
                     //- Subir el artefacto creado al repositorio privado de Nexus.
                     //- Ejecutar este paso solo si los pasos anteriores se ejecutan de manera correcta.
                     success {
+                        script { STAGE = '4.a Subir a Nexus ' }
                         sh "echo 'Subir a nexus'"
                     //                         nexusPublisher nexusInstanceId: 'nexus',
                     //                         nexusRepositoryId: 'devops-usach-nexus',
@@ -94,13 +93,14 @@ def call(Map pipelineParameters) {
                     }
                 }
             }
-            stage('6 gitCreateRelease') {
+            stage('5 gitCreateRelease') {
                 //- Crear rama release cuando todos los stages anteriores estén correctamente ejecutados.
                 //- Este stage sólo debe estar disponible para la rama develop.
                 when {
                     branch 'develop'
                 }
                 steps {
+                    script { STAGE = '5 gitCreateRelease ' }
                     sh "echo 'gitCreateRelease'"
                     withCredentials([gitUsernamePassword(credentialsId: 'github-token')]) {
                         sh '''
