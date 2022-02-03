@@ -47,6 +47,11 @@ def call(Map pipelineParameters) {
                 post {
                     success {
                         script {
+                            STAGE = 'gitTagMaster '
+                            sh 'echo "gitTagMaster"'
+                            sh 'git tag -a v1-0-0 -m "version 1-0-0"'
+                        }
+                        script {
                             STAGE = 'gitMergeMaster '
                             sh 'echo ######################'
                             sh 'echo ### gitMergeMaster ###'
@@ -56,6 +61,7 @@ def call(Map pipelineParameters) {
                             sh '''
                             git checkout main
                             git merge release/release-v1-0-0
+                            git tag
                             '''
                         }
                         script {
@@ -66,11 +72,8 @@ def call(Map pipelineParameters) {
                             sh '''
                             git checkout develop
                             git merge release/release-v1-0-0
+                            git tag
                             '''
-                        }
-                        script {
-                            STAGE = 'gitTagMaster '
-                            sh "echo 'gitTagMaster'"
                         }
                     }
                 }
