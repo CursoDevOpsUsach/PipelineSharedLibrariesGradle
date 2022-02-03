@@ -16,8 +16,8 @@ def call(Map pipelineParameters) {
                 steps {
                     script { STAGE = 'gitDiff ' }
                     sh '''
-                      echo 'gitDiff'
-#                     git diff release-v1-0-0 origin/main
+                      echo '
+                      git diff release-v1-0-0 origin/main
                       '''
                 }
             }
@@ -49,8 +49,26 @@ def call(Map pipelineParameters) {
                 post {
                     success {
                         script {
+                            STAGE = 'gitMergeMaster '
+                            sh 'echo ######################'
+                            sh 'echo ### gitMergeMaster ###'
+                            sh 'echo ######################'
+                        }
+                        withCredentials([gitUsernamePassword(credentialsId: 'github-token')]) {
+                            sh '''
+                            git checkout main
+                            git merge release-v1-0-0
+                            '''
+                        }
+                        script {
                             STAGE = 'gitMergeDevelop '
                             sh "echo 'gitMergeDevelop'"
+                        }
+                        withCredentials([gitUsernamePassword(credentialsId: 'github-token')]) {
+                            sh '''
+                            git checkout develop
+                            git merge release-v1-0-0
+                            '''
                         }
                         script {
                             STAGE = 'gitTagMaster '
@@ -64,13 +82,13 @@ def call(Map pipelineParameters) {
                 success {
                     slackSend(
                         color: 'good',
-                        message: "[Grupo5][PIPELINE Release][${env.BRANCH_NAME}][Stage: ${BUILD_ID}][Resultado: Ok]",
+                        message: "[Grupo5][PIPELINE Release][${env.BRANCH_NAME}][Stage: ${STAGE}][Resultado: Ok]",
                         tokenCredentialId: SLACK_TOKEN)
                 }
                 failure {
                     slackSend(
                         color: 'danger',
-                        message: "[Grupo5][PIPELINE Release][${env.BRANCH_NAME}][Stage: ${BUILD_ID}][Resultado: No OK]",
+                        message: "[Grupo5][PIPELINE Release][${env.BRANCH_NAME}][Stage: ${STAGE}][Resultado: No OK]",
                         tokenCredentialId: SLACK_TOKEN)
                 }
             }
