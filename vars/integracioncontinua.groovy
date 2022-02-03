@@ -20,12 +20,6 @@ def call(Map pipelineParameters) {
             }
 
             stage('0 Validate Maven Files') {
-                steps {
-                        script {
-                            STAGE = '0 Validate Maven Files '
-                            error('file dont exist :( ')
-                        }
-                }
                 when {
                         anyOf {
                                 not { expression { fileExists ('pom.xml') } }
@@ -36,6 +30,7 @@ def call(Map pipelineParameters) {
                     steps {
                         sh "echo  'Faltan archivos Maven en su estructura'"
                         script {
+                            STAGE = '0 Validate Maven Files '
                             error('file dont exist :( ')
                         }
                     }
@@ -43,6 +38,10 @@ def call(Map pipelineParameters) {
             stage('1 Compile') {
                 //- Compilar el código con comando maven
                 steps {
+                    script {
+                            STAGE = '1 Compile '
+                            error('Error forzado')
+                    }
                     sh "echo 'Compile Code!'"
                 // Run Maven on a Unix agent.
                 //sh "mvn clean compile -e"
