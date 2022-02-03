@@ -53,15 +53,14 @@ def call(Map pipelineParameters) {
                         }
                         script {
                             STAGE = 'gitMergeMaster '
-                            sh 'echo ######################'
-                            sh 'echo ### gitMergeMaster ###'
-                            sh 'echo ######################'
+                            sh 'echo "gitMergeMaster" '
                         }
                         withCredentials([gitUsernamePassword(credentialsId: 'github-token')]) {
                             sh '''
                             git checkout main2
                             git merge release/release-v1-0-0
-                            push origin main2
+                            git push origin main2
+                            git push origin "v1-0-0"
                             git show v1-0-0
 
                             '''
