@@ -86,5 +86,15 @@ def call(stages) {
                     }
                 //solo cuando es develop debo crear rama release.
                 }
+            }
+        }
+        post {
+            success {
+                    slackSend color: 'good', message: "[Grupo5][PIPELINE IC][${env.BRANCH_NAME}][Stage: ${BUILD_ID}][Resultado: Ok]", teamDomain: 'dipdevopsusac-tr94431', tokenCredentialId: 'slack-duribef'
+            }
+            failure {
+                    slackSend color: 'danger', message: "[Grupo5][PIPELINE IC][${env.BRANCH_NAME}][Stage: ${BUILD_ID}][Resultado: No OK]", teamDomain: 'dipdevopsusac-tr94431', tokenCredentialId: 'slack-duribef'
+            }
+        }
     }
 }
