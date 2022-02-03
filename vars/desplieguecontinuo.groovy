@@ -49,7 +49,7 @@ def call(Map pipelineParameters) {
                         script {
                             STAGE = 'gitTagMaster '
                             sh 'echo "gitTagMaster"'
-                            sh 'git tag -a v1-0-0 -m "version 1-0-0"'
+                            sh 'git tag -a "v1-0-0" -m "Release 1-0-0"'
                         }
                         script {
                             STAGE = 'gitMergeMaster '
@@ -59,22 +59,24 @@ def call(Map pipelineParameters) {
                         }
                         withCredentials([gitUsernamePassword(credentialsId: 'github-token')]) {
                             sh '''
-                            git checkout main
+                            git checkout main2
                             git merge release/release-v1-0-0
-                            git tag
+                            push origin main2
+                            git show v1-0-0
+
                             '''
                         }
-                        script {
-                            STAGE = 'gitMergeDevelop '
-                            sh "echo 'gitMergeDevelop'"
-                        }
-                        withCredentials([gitUsernamePassword(credentialsId: 'github-token')]) {
-                            sh '''
-                            git checkout develop
-                            git merge release/release-v1-0-0
-                            git tag
-                            '''
-                        }
+//                        script {
+//                            STAGE = 'gitMergeDevelop '
+//                            sh "echo 'gitMergeDevelop'"
+//                        }
+//                        withCredentials([gitUsernamePassword(credentialsId: 'github-token')]) {
+//                            sh '''
+//                            git checkout develop
+//                            git merge release/release-v1-0-0
+//                            git tag
+//                            '''
+//                        }
                     }
                 }
             }
