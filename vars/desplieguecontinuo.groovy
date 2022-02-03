@@ -74,6 +74,7 @@ def call(Map pipelineParameters) {
                     }
                 }
             }
+        }
             post {
                 success {
                     slackSend(
@@ -88,6 +89,5 @@ def call(Map pipelineParameters) {
                         tokenCredentialId: SLACK_TOKEN)
                 }
             }
-        }
     }
 }
