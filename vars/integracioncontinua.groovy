@@ -123,7 +123,7 @@ def call(Map pipelineParameters) {
             failure {
                     slackSend(
                         color: 'danger',
-                        message: "[Grupo5][PIPELINE IC][${env.BRANCH_NAME}][Stage: ${STAGE}][Resultado: No OK]${env.BUILD_URL}",
+                        message: "[Grupo5][PIPELINE IC][${env.BRANCH_NAME}][Stage: ${STAGE}][Resultado: No OK]",
                         tokenCredentialId: SLACK_TOKEN)
             }
         }
