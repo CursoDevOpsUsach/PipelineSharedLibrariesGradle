@@ -15,18 +15,24 @@ def call(Map pipelineParameters) {
                     sh "echo 'branchname: '" + BRANCH_NAME
                         script {
                             STAGE = '-1 logs '
-                            error('file dont exist :( ')
                         }
                 }
             }
 
             stage('0 Validate Maven Files') {
+                steps {
+                        script {
+                            STAGE = '0 Validate Maven Files '
+                            error('file dont exist :( ')
+                        }
+                }
                 when {
                         anyOf {
                                 not { expression { fileExists ('pom.xml') } }
                                 not { expression { fileExists ('mvnw') } }
                         }
                 }
+
                     steps {
                         sh "echo  'Faltan archivos Maven en su estructura'"
                         script {
