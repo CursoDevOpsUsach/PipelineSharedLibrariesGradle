@@ -16,7 +16,7 @@ def call(Map pipelineParameters) {
                 steps {
                     script { STAGE = 'gitDiff ' }
                     sh 'echo gitDiff'
-                    sh 'git diff release-v1-0-0 main'
+                    sh 'git diff release/release-v1-0-0 origin/main'
                 }
             }
             stage('nexusDownload') {
