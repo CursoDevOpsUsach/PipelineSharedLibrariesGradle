@@ -93,24 +93,24 @@ def call(Map pipelineParameters) {
                     }
                 }
             }
-            stage('Create Release') {
-                //- Crear rama release cuando todos los stages anteriores estén correctamente ejecutados.
-                //- Este stage sólo debe estar disponible para la rama develop.
-                when {
-                    branch 'develop'
-                }
-                steps {
-                    script { STAGE = 'Create Release ' }
-                    sh "echo 'gitCreateRelease'"
-                    withCredentials([gitUsernamePassword(credentialsId: 'github-token')]) {
-                        sh '''
-                            git checkout -b release/release-v$FINAL_VERSION
-                            git push origin release/release-v$FINAL_VERSION
-                           '''
-                    }
-                //solo cuando es develop debo crear rama release.
-                }
-            }
+//            stage('Create Release') {
+//                //- Crear rama release cuando todos los stages anteriores estén correctamente ejecutados.
+//                //- Este stage sólo debe estar disponible para la rama develop.
+//                when {
+//                    branch 'develop'
+//                }
+//                steps {
+//                    script { STAGE = 'Create Release ' }
+//                    sh "echo 'gitCreateRelease'"
+//                    withCredentials([gitUsernamePassword(credentialsId: 'github-token')]) {
+//                        sh '''
+//                            git checkout -b release/release-v$FINAL_VERSION
+//                            git push origin release/release-v$FINAL_VERSION
+//                           '''
+//                    }
+//                //solo cuando es develop debo crear rama release.
+//                }
+//            }
         }
 
         post {
