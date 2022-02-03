@@ -9,8 +9,8 @@ def call(Map pipelineParameters) {
         }
 
         stages {
-            env.STAGE = '-1 logs'
             stage('$env.STAGE') {
+                env.STAGE = '-1 logs'
                 steps {
                     sh "echo 'branchname: '" + BRANCH_NAME
                 }
