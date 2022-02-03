@@ -49,7 +49,7 @@ def call(Map pipelineParameters) {
             stage('2 Unit Test') {
                 //- Testear el código con comando maven
                 steps {
-                    script(STAGE = '2 Unit Test ')
+                    script { STAGE = '2 Unit Test ' }
                     sh "echo 'Test Code!'"
                 // Run Maven on a Unix agent.
                 //sh "mvn clean test -e"
