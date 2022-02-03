@@ -1,12 +1,4 @@
 def call(Map pipelineParameters) {
-    pipeline {
-        agent any
-        environment {
-            NEXUS_USER = credentials('usernexusadmin')
-            NEXUS_PASSWORD = credentials('passnexusadmin')
-            VERSION = '0-0-17'
-            FINAL_VERSION = '1-0-0'
-        }
         stages {
             stage('-1 logs') {
                 steps {
@@ -110,5 +102,4 @@ def call(Map pipelineParameters) {
                     slackSend color: 'danger', message: "[Grupo5][PIPELINE IC][${env.BRANCH_NAME}][Stage: ${STAGE_NAME}][Resultado: No OK]", teamDomain: 'dipdevopsusac-tr94431', tokenCredentialId: 'slack-duribef'
             }
         }
-    }
 }
