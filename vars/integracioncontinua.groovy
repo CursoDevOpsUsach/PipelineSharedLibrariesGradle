@@ -1,4 +1,4 @@
-def call(Map pipelineParameters) {
+def call(stages){
         stages {
             stage('-1 logs') {
                 steps {
