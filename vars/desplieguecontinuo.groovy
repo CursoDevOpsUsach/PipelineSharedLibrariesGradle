@@ -55,7 +55,7 @@ def call(Map pipelineParameters) {
                         withCredentials([gitUsernamePassword(credentialsId: 'github-token')]) {
                             sh '''
                             git checkout main
-                            git merge release-v1-0-0
+                            git merge release/release-v1-0-0
                             '''
                         }
                         script {
@@ -65,7 +65,7 @@ def call(Map pipelineParameters) {
                         withCredentials([gitUsernamePassword(credentialsId: 'github-token')]) {
                             sh '''
                             git checkout develop
-                            git merge release-v1-0-0
+                            git merge release/release-v1-0-0
                             '''
                         }
                         script {
