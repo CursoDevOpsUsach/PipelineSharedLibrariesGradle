@@ -6,7 +6,7 @@ def call(Map pipelineParameters) {
             NEXUS_PASSWORD = credentials('passnexusadmin')
             VERSION = '0-0-17'
             FINAL_VERSION = '1-0-0'
-            STAGE = '-1 logs '
+            STAGE = ''
         }
 
         stages {
@@ -14,6 +14,7 @@ def call(Map pipelineParameters) {
                 steps {
                     sh "echo 'branchname: '" + BRANCH_NAME
                         script {
+                            STAGE = '-1 logs '
                             error('file dont exist :( ')
                         }
                 }
