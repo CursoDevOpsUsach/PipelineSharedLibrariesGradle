@@ -4,6 +4,7 @@ def call(Map pipelineParameters) {
         environment {
             NEXUS_USER = credentials('usernexusadmin')
             NEXUS_PASSWORD = credentials('passnexusadmin')
+            SLACK_TOKEN = 'slack-duribef'
             VERSION = '0-0-17'
             FINAL_VERSION = '1-0-0'
             STAGE = ' '
@@ -16,8 +17,7 @@ def call(Map pipelineParameters) {
                         script { STAGE = '-1 logs ' }
                 }
             }
-
-            stage('0 Validate Maven Files') {
+            stage('Validate Maven Files') {
                 when {
                         anyOf {
                                 not { expression { fileExists ('pom.xml') } }
@@ -28,46 +28,46 @@ def call(Map pipelineParameters) {
                     steps {
                         sh "echo  'Faltan archivos Maven en su estructura'"
                         script {
-                            STAGE = '0 Validate Maven Files '
+                            STAGE = 'Validate Maven Files '
                             error('file dont exist :( ')
                         }
                     }
             }
-            stage('1 Compile') {
+            stage('Compile') {
                 //- Compilar el código con comando maven
                 steps {
-                    script { STAGE = '1 Compile ' }
+                    script { STAGE = 'Compile ' }
                     sh "echo 'Compile Code!'"
                 // Run Maven on a Unix agent.
                 //sh "mvn clean compile -e"
                 }
             }
-            stage('2 Unit Test') {
+            stage('Unit Test') {
                 //- Testear el código con comando maven
                 steps {
-                    script { STAGE = '2 Unit Test ' }
+                    script { STAGE = 'Unit Test ' }
                     sh "echo 'Test Code!'"
                 // Run Maven on a Unix agent.
                 //sh "mvn clean test -e"
                 }
             }
-            stage('3 Build jar') {
+            stage('Build jar') {
                 //- Generar artefacto del código compilado.
                 steps {
-                    script { STAGE = '3 Build jar ' }
+                    script { STAGE = 'Build jar ' }
                     sh "echo 'Build .Jar!'"
                 // Run Maven on a Unix agent.
                 //sh "mvn clean package -e"
                 }
             }
-            stage('4 SonarQube') {
+            stage('SonarQube') {
                 //- Generar análisis con sonar para cada ejecución
                 //- Cada ejecución debe tener el siguiente formato de nombre: QUE ES EL NOMBRE DE EJECUCIÓN ??
                 //- {nombreRepo}-{rama}-{numeroEjecucion} ejemplo:
                 //- ms-iclab-feature-estadomundial(Si está usando el CRUD ms-iclab-feature-[nombre de su crud])
 
                 steps {
-                    script { STAGE = '4 SonarQube ' }
+                    script { STAGE = 'SonarQube ' }
                     sh "echo 'SonarQube'"
                 //                    withSonarQubeEnv('sonarqube') {
                 //                        sh "echo 'SonarQube'"
@@ -78,7 +78,7 @@ def call(Map pipelineParameters) {
                     //- Subir el artefacto creado al repositorio privado de Nexus.
                     //- Ejecutar este paso solo si los pasos anteriores se ejecutan de manera correcta.
                     success {
-                        script { STAGE = '4.a Subir a Nexus ' }
+                        script { STAGE = 'Subir a Nexus ' }
                         sh "echo 'Subir a nexus'"
                     //                         nexusPublisher nexusInstanceId: 'nexus',
                     //                         nexusRepositoryId: 'devops-usach-nexus',
@@ -93,14 +93,14 @@ def call(Map pipelineParameters) {
                     }
                 }
             }
-            stage('5 gitCreateRelease') {
+            stage('Create Release') {
                 //- Crear rama release cuando todos los stages anteriores estén correctamente ejecutados.
                 //- Este stage sólo debe estar disponible para la rama develop.
                 when {
                     branch 'develop'
                 }
                 steps {
-                    script { STAGE = '5 gitCreateRelease ' }
+                    script { STAGE = 'Create Release ' }
                     sh "echo 'gitCreateRelease'"
                     withCredentials([gitUsernamePassword(credentialsId: 'github-token')]) {
                         sh '''
@@ -115,10 +115,16 @@ def call(Map pipelineParameters) {
 
         post {
             success {
-                    slackSend color: 'good', message: "[Grupo5][PIPELINE IC][${env.BRANCH_NAME}][Stage: ${STAGE}][Resultado: Ok]", teamDomain: 'dipdevopsusac-tr94431', tokenCredentialId: 'slack-duribef'
+                    slackSend(
+                        color: 'good',
+                        message: "[Grupo5][PIPELINE IC][${env.BRANCH_NAME}][Stage: ${STAGE}][Resultado: Ok]",
+                        tokenCredentialId: SLACK_TOKEN)
             }
             failure {
-                    slackSend color: 'danger', message: "[Grupo5][PIPELINE IC][${env.BRANCH_NAME}][Stage: ${STAGE}][Resultado: No OK](${env.BUILD_URL})", teamDomain: 'dipdevopsusac-tr94431', tokenCredentialId: 'slack-duribef'
+                    slackSend(
+                        color: 'danger',
+                        message: "[Grupo5][PIPELINE IC][${env.BRANCH_NAME}][Stage: ${STAGE}][Resultado: No OK]${env.BUILD_URL}",
+                        tokenCredentialId: SLACK_TOKEN)
             }
         }
     }
