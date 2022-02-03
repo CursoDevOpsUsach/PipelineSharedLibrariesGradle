@@ -17,15 +17,17 @@ def call(Map pipelineParameters) {
 
             stage('0 Validate Maven Files') {
                 when {
-                    anyOf {
-                        not { expression { fileExists ('pom.xml') } }
-                        not { expression { fileExists ('mvnw') } }
+                        anyOf {
+                                not { expression { fileExists ('pom.xml') } }
+                                not { expression { fileExists ('mvnw') } }
+                        }
+                }
+                    steps {
+                        sh "echo  'Faltan archivos Maven en su estructura'"
+                        script {
+                            error('file dont exist :( ')
+                        }
                     }
-                }
-                sh "echo  'Faltan archivos Maven en su estructura'"
-                script {
-                    error('file dont exist :( ')
-                }
             }
             stage('1 Compile') {
                 //- Compilar el código con comando maven
