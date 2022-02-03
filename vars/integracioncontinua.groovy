@@ -6,13 +6,11 @@ def call(Map pipelineParameters) {
             NEXUS_PASSWORD = credentials('passnexusadmin')
             VERSION = '0-0-17'
             FINAL_VERSION = '1-0-0'
+            STAGE = '-1 logs '
         }
 
         stages {
             stage('-1 logs') {
-                environment {
-                    STAGE = '-1 logs '
-                }
                 steps {
                     sh "echo 'branchname: '" + BRANCH_NAME
                         script {
