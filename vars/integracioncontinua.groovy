@@ -94,12 +94,4 @@ def call(Map pipelineParameters) {
                 }
             }
         }
-        post {
-            success {
-                    slackSend color: 'good', message: "[Grupo5][PIPELINE IC][${env.BRANCH_NAME}][Stage: ${STAGE_NAME}][Resultado: Ok]", teamDomain: 'dipdevopsusac-tr94431', tokenCredentialId: 'slack-duribef'
-            }
-            failure {
-                    slackSend color: 'danger', message: "[Grupo5][PIPELINE IC][${env.BRANCH_NAME}][Stage: ${STAGE_NAME}][Resultado: No OK]", teamDomain: 'dipdevopsusac-tr94431', tokenCredentialId: 'slack-duribef'
-            }
-        }
 }
