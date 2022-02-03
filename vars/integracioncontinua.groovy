@@ -1,27 +1,21 @@
 def call(stages){
-        stages {
-            stage('-1 logs') {
-                steps {
-                    sh "echo 'branchname: '" + BRANCH_NAME
+        stage('-1 logs') {
+                sh "echo 'branchname: '" + BRANCH_NAME
                 //sh 'printenv'
-                }
-            }
-
-            stage('0 Validate Maven Files') {
+        }
+        stage('0 Validate Maven Files') {
                 when {
                         anyOf {
                                 not { expression { fileExists ('pom.xml') } }
                                 not { expression { fileExists ('mvnw') } }
                         }
                 }
-                    steps {
-                        sh "echo  'Faltan archivos Maven en su estructura'"
-                        script {
-                            error('file dont exist :( ')
-                        }
-                    }
-            }
-            stage('1 Compile') {
+                sh "echo  'Faltan archivos Maven en su estructura'"
+                script {
+                        error('file dont exist :( ')
+                }
+        }
+        stage('1 Compile') {
                 //- Compilar el código con comando maven
                 steps {
                     sh "echo 'Compile Code!'"
