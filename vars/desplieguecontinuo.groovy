@@ -46,21 +46,6 @@ def call(Map pipelineParameters) {
                     sh 'echo Test Curl'
                 //                  sh "sleep 30 && curl -X GET 'http://localhost:8081/rest/mscovid/test?msg=testing'"
                 }
-            }
-            stage('gitMergeMaster') {
-                //- Realizar merge directo hacia la rama master.
-                //- Ejecutar sólo si todo lo demás resulta de forma exitosa.
-                steps {
-                    script { STAGE = 'gitMergeMaster ' }
-                    sh 'echo gitMergeMaster'
-                //                    withCredentials([gitUsernamePassword(credentialsId: 'github-token')]) {
-                //                            sh '''
-                //                            git checkout origin/test-crearRama
-                //                            git merge release-v1-0-0
-                //                            git commit -am "Merged release-v1-0-0 branch to test-crearRama"
-                //                            git push origin HEAD:test-crearRama
-                //                           '''}
-                }
                 post {
                     success {
                         script {
