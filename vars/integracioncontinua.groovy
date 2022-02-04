@@ -57,8 +57,8 @@ def call(Map args) {
                 steps {
                     script { STAGE = 'Compile ' }
                     sh "echo 'Compile Code!'"
-                // Run Maven on a Unix agent.
-                // sh 'mvn clean compile -e'
+                    // Run Maven on a Unix agent.
+                    sh 'mvn clean compile -e'
                 }
             }
             stage('Unit Test') {
@@ -66,8 +66,8 @@ def call(Map args) {
                 steps {
                     script { STAGE = 'Unit Test ' }
                     sh "echo 'Test Code!'"
-                // Run Maven on a Unix agent.
-                // sh 'mvn clean test -e'
+                    // Run Maven on a Unix agent.
+                    sh 'mvn clean test -e'
                 }
             }
             stage('Build jar') {
