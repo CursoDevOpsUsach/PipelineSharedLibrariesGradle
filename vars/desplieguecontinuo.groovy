@@ -11,13 +11,13 @@ def call(Map args) {
         }
         stages {
             stage('gitDiff') {
-            //- Mostrar por pantalla las diferencias entre la rama release en curso y la rama
-            //master.(Opcional)
-            // steps {
-            //     script { STAGE = 'gitDiff ' }
-            //     sh 'echo gitDiff'
-            //     sh 'git diff release/release-v1-0-0 origin/main'
-            // }
+                //- Mostrar por pantalla las diferencias entre la rama release en curso y la rama
+                //master.(Opcional)
+                steps {
+                    script { STAGE = 'gitDiff ' }
+                    sh 'echo gitDiff'
+                // sh 'git diff release/release-v1-0-0 origin/main'
+                }
             }
             stage('nexusDownload') {
                 //- Descargar el artefacto creado al workspace de la ejecución del pipeline.
@@ -44,13 +44,13 @@ def call(Map args) {
             stage('test') {
                 //- Realizar llamado a microservicio expuesto en local para cada uno de sus
                 //métodos y mostrar los resultados.
-                // steps {
-                //     script { STAGE = 'test ' }
-                //     sh 'echo Test Curl'
-                //     sh "sleep 30 && curl -X GET 'http://localhost:8081/rest/mscovid/test?msg=testing'"
-                //     sh "sleep 5 && curl -X GET 'http://localhost:8081/rest/mscovid/estadoMundial'"
-                //     sh "sleep 5 && curl -X GET 'http://localhost:8081/rest/mscovid/estadoPais?pais=chile'"
-                // }
+                steps {
+                    script { STAGE = 'test ' }
+                    sh 'echo Test Curl'
+                    // sh "sleep 30 && curl -X GET 'http://localhost:8081/rest/mscovid/test?msg=testing'"
+                    // sh "sleep 5 && curl -X GET 'http://localhost:8081/rest/mscovid/estadoMundial'"
+                    // sh "sleep 5 && curl -X GET 'http://localhost:8081/rest/mscovid/estadoPais?pais=chile'"
+                }
                 post {
                     success {
                         script {
