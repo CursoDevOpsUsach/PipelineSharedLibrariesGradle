@@ -2,20 +2,13 @@ def call() {
     if ((env.BRANCH_NAME =~ '.*feature.*').matches() || (env.BRANCH_NAME =~ '.*develop.*').matches() ) {
         figlet 'Running CI'
         echo 'Rama Feature o develop'
-        integracioncontinua.call(
-        VERSION:'0.0.16'
-    )
+        integracioncontinua.call()
 } else if ((env.BRANCH_NAME =~ '.*release.*').matches()) {
-        'Running CD'
+        figlet 'Running CD'
         echo 'Rama Release'
-        desplieguecontinuo.call(
-        VERSION:'0.0.16'
-    )
+        desplieguecontinuo.call()
 } else {
         echo 'Su rama tiene formato erroneo o esta intentando ejecutar desde la rama master.'
-        integracioncontinua.call(
-        VERSION:'0.0.16'
-    )
     }
 }
 return this
