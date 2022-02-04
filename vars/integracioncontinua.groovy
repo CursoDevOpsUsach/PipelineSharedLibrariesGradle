@@ -11,16 +11,19 @@ def call(Map args) {
         stages {
             stage('-1 logs') {
                 steps {
+                    //- Generar análisis con sonar para cada ejecución
+                    //- Cada ejecución debe tener el siguiente formato de nombre:
+                    //- {nombreRepo}-{rama}-{numeroEjecucion} ejemplo:
+                    //- ms-iclab-feature-estadomundial(Si está usando el CRUD ms-iclab-feature-[nombre de su crud])
                     script {
                         env.GIT_REPO_NAME = env.GIT_URL.replaceFirst(/^.*\/([^\/]+?).git$/, '$1')
                         currentBuild.displayName = GIT_REPO_NAME + '-' + BRANCH_NAME + '-' + BUILD_NUMBER
                     }
-                    sh 'echo currentBuild.displayName'
                     sh "echo 'branchname: '" + BRANCH_NAME
                         script { STAGE = '-1 logs ' }
                 }
             }
-            stage('Validate Maven Files') {
+            stage('Validate mvn') {
                 when {
                         anyOf {
                                 not { expression { fileExists ('pom.xml') } }
@@ -35,6 +38,20 @@ def call(Map args) {
                             error('file dont exist :( ')
                         }
                     }
+            }
+            stage('Update POM') {
+                //- Este stage sólo debe estar disponible para la rama develop.
+                //- Upgrade version del pom.xml si corre develop
+                when {
+                    branch 'develop*'
+                }
+                steps {
+                    sh "echo 'mvnUpdatePom'"
+                    script {
+                        STAGE = 'Update POM '
+                        sh 'mvn versions:set -DnewVersion=1.0.0'
+                    }
+                }
             }
             stage('Compile') {
                 //- Compilar el código con comando maven
@@ -64,10 +81,6 @@ def call(Map args) {
                 }
             }
             stage('SonarQube') {
-                //- Generar análisis con sonar para cada ejecución
-                //- Cada ejecución debe tener el siguiente formato de nombre: QUE ES EL NOMBRE DE EJECUCIÓN ??
-                //- {nombreRepo}-{rama}-{numeroEjecucion} ejemplo:
-                //- ms-iclab-feature-estadomundial(Si está usando el CRUD ms-iclab-feature-[nombre de su crud])
                 steps {
                     script { STAGE = 'SonarQube ' }
                     sh "echo 'SonarQube'"
@@ -87,11 +100,11 @@ def call(Map args) {
             //                             packages: [[$class: 'MavenPackage',
             //                                  mavenAssetList: [[classifier: '',
             //                                                  extension: '',
-            //                                                  filePath: 'build/DevOpsUsach2020-0.0.1.jar']],
+            //                                                  filePath: 'build/DevOpsUsach2020-${POM_VERSION}.jar']],
             //                                  mavenCoordinate: [artifactId: 'DevOpsUsach2020',
             //                                                  groupId: 'com.devopsusach2020',
             //                                                  packaging: 'jar',
-            //                                                  version: '0.0.1']]]
+            //                                                  version: ${POM_VERSION}]]]
             //     }
             // }
             }
@@ -99,18 +112,22 @@ def call(Map args) {
                 //- Subir el artefacto creado al repositorio privado de Nexus.
                 //- Ejecutar este paso solo si los pasos anteriores se ejecutan de manera correcta.
                 steps {
-                    script { STAGE = 'Subir a Nexus ' }
+                    script {
+                        STAGE = 'Subir a Nexus '
+                        mavenPom = readMavenPom file: 'pom.xml'
+                        sh "echo ${mavenPom.version}"
+                    }
                     sh "echo 'Subir a nexus'"
-                // nexusPublisher nexusInstanceId: 'nexus',
-                //                      nexusRepositoryId: 'ms-iclab',
-                //                     packages: [[$class: 'MavenPackage',
-                //                                 mavenAssetList: [[classifier: '',
-                //                                                 extension: '',
-                //                                                 filePath: 'build/DevOpsUsach2020-0.0.1.jar']],
-                //                                 mavenCoordinate: [artifactId: 'DevOpsUsach2020',
-                //                                                 groupId: 'com.devopsusach2020',
-                //                                                 packaging: 'jar',
-                //                                                 version: '0.0.1']]]
+                    nexusPublisher nexusInstanceId: 'nexus',
+                                     nexusRepositoryId: 'ms-iclab',
+                                    packages: [[$class: 'MavenPackage',
+                                                mavenAssetList: [[classifier: '',
+                                                                extension: '',
+                                                                filePath: "build/DevOpsUsach2020-${mavenPom.version}.jar"]],
+                                                mavenCoordinate: [artifactId: 'DevOpsUsach2020',
+                                                                groupId: 'com.devopsusach2020',
+                                                                packaging: 'jar',
+                                                                version: "${mavenPom.version}"]]]
                 }
             }
         //    stage('Create Release') {
@@ -134,20 +151,17 @@ def call(Map args) {
         }
 
         post {
-            // success {
-            //         slackSend(
-            //             color: 'good',
-            //             message: "[Grupo5][PIPELINE IC][${env.BRANCH_NAME}][Stage: ${STAGE}][Resultado: Ok]",
-            //             tokenCredentialId: SLACK_TOKEN)
-            // }
-            // failure {
-            //         slackSend(
-            //             color: 'danger',
-            //             message: "[Grupo5][PIPELINE IC][${env.BRANCH_NAME}][Stage: ${STAGE}][Resultado: No OK]",
-            //             tokenCredentialId: SLACK_TOKEN)
-            // }
-            always {
-                echo 'I will always execute this!'
+            success {
+                    slackSend(
+                        color: 'good',
+                        message: "[Grupo5][PIPELINE IC][${env.BRANCH_NAME}][Stage: ${STAGE}][Resultado: Ok]",
+                        tokenCredentialId: SLACK_TOKEN)
+            }
+            failure {
+                    slackSend(
+                        color: 'danger',
+                        message: "[Grupo5][PIPELINE IC][${env.BRANCH_NAME}][Stage: ${STAGE}][Resultado: No OK]",
+                        tokenCredentialId: SLACK_TOKEN)
             }
         }
     }
