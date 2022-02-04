@@ -23,20 +23,6 @@ def call(Map args) {
                         script { STAGE = '-1 logs ' }
                 }
             }
-            stage('Update POM') {
-                //- Este stage sólo debe estar disponible para la rama develop.
-                //- Upgrade version del pom.xml si corre develop
-                when {
-                    branch 'develop*'
-                }
-                steps {
-                    sh "echo 'mvnUpdatePom'"
-                    script {
-                        STAGE = 'Update POM '
-                        sh 'mvn versions:set -DnewVersion=1.0.0'
-                    }
-                }
-            }
             stage('Validate Maven Files') {
                 when {
                         anyOf {
@@ -52,6 +38,20 @@ def call(Map args) {
                             error('file dont exist :( ')
                         }
                     }
+            }
+            stage('Update POM') {
+                //- Este stage sólo debe estar disponible para la rama develop.
+                //- Upgrade version del pom.xml si corre develop
+                when {
+                    branch 'develop*'
+                }
+                steps {
+                    sh "echo 'mvnUpdatePom'"
+                    script {
+                        STAGE = 'Update POM '
+                        sh 'mvn versions:set -DnewVersion=1.0.0'
+                    }
+                }
             }
             stage('Compile') {
                 //- Compilar el código con comando maven
