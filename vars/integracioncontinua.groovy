@@ -15,9 +15,6 @@ def call(Map args) {
                         env.GIT_REPO_NAME = env.GIT_URL.replaceFirst(/^.*\/([^\/]+?).git$/, '$1')
                         currentBuild.displayName = GIT_REPO_NAME + '-' + BRANCH_NAME + '-' + BUILD_NUMBER
                     }
-                        ansiColor('xterm') {
-                        sh 'Hola Mundo'
-                        }
                     sh "echo 'branchname: '" + BRANCH_NAME
                         script { STAGE = '-1 logs ' }
                 }
@@ -43,8 +40,8 @@ def call(Map args) {
                 steps {
                     script { STAGE = 'Compile ' }
                     sh "echo 'Compile Code!'"
-                // Run Maven on a Unix agent.
-                // sh 'mvn clean compile -e'
+                    // Run Maven on a Unix agent.
+                    // sh 'mvn clean compile -e'
                 }
             }
             stage('Unit Test') {
@@ -52,8 +49,8 @@ def call(Map args) {
                 steps {
                     script { STAGE = 'Unit Test ' }
                     sh "echo 'Test Code!'"
-                // Run Maven on a Unix agent.
-                // sh 'mvn clean test -e'
+                    // Run Maven on a Unix agent.
+                    // sh 'mvn clean test -e'
                 }
             }
             stage('Build jar') {
@@ -61,8 +58,8 @@ def call(Map args) {
                 steps {
                     script { STAGE = 'Build jar ' }
                     sh "echo 'Build .Jar!'"
-                // Run Maven on a Unix agent.
-                // sh 'mvn clean package -e'
+                    // Run Maven on a Unix agent.
+                    // sh 'mvn clean package -e'
                 }
             }
             stage('SonarQube') {
