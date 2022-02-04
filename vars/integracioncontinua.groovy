@@ -13,7 +13,7 @@ def call(Map args) {
                 steps {
                     script {
                         env.GIT_REPO_NAME = env.GIT_URL.replaceFirst(/^.*\/([^\/]+?).git$/, '$1')
-                        currentBuild.displayName = GIT_REPO_NAME + BRANCH_NAME + STAGE
+                        currentBuild.displayName = GIT_REPO_NAME + '-' + BRANCH_NAME + '-' + BUILD_NUMBER
                     }
                     sh 'echo currentBuild.displayName'
                     sh "echo 'branchname: '" + BRANCH_NAME
