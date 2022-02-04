@@ -10,6 +10,20 @@ def call(Map args) {
             STAGE = ' '
         }
         stages {
+            stage('-1 logs') {
+                steps {
+                    //- Generar análisis con sonar para cada ejecución
+                    //- Cada ejecución debe tener el siguiente formato de nombre:
+                    //- {nombreRepo}-{rama}-{numeroEjecucion} ejemplo:
+                    //- ms-iclab-feature-estadomundial(Si está usando el CRUD ms-iclab-feature-[nombre de su crud])
+                    script {
+                        env.GIT_REPO_NAME = env.GIT_URL.replaceFirst(/^.*\/([^\/]+?).git$/, '$1')
+                        currentBuild.displayName = GIT_REPO_NAME + '-' + BRANCH_NAME + '-' + BUILD_NUMBER
+                    }
+                    sh "echo 'branchname: '" + BRANCH_NAME
+                        script { STAGE = '-1 logs ' }
+                }
+            }
             stage('gitDiff') {
                 //- Mostrar por pantalla las diferencias entre la rama release en curso y la rama
                 //master.(Opcional)
@@ -51,45 +65,45 @@ def call(Map args) {
                     sh "sleep 5 && curl -X GET 'http://localhost:8081/rest/mscovid/estadoMundial'"
                     sh "sleep 5 && curl -X GET 'http://localhost:8081/rest/mscovid/estadoPais?pais=chile'"
                 }
-                // post {
-                //     success {
-                //         script {
-                //             STAGE = 'gitTagMaster '
-                //             sh 'echo "gitTagMaster"'
-                //         }
-                //         withCredentials([gitUsernamePassword(credentialsId: 'github-token')]) {
-                //             sh '''
-                //             git tag -a "v1-0-0" -m "Release 1-0-0"
-                //             git push origin "v1-0-0"
-                //             git show v1-0-0
-                //             '''
-                //         }
-                //         script {
-                //             STAGE = 'gitMergeMaster '
-                //             sh 'echo "gitMergeMaster" '
-                //         }
-                //         withCredentials([gitUsernamePassword(credentialsId: 'github-token')]) {
-                //             sh '''
-                //             git checkout main2
-                //             git merge release/release-v1-0-0
-                //             git push origin main2
-                //             git tag
-                //             '''
-                //         }
-                //         script {
-                //             STAGE = 'gitMergeDevelop '
-                //             sh "echo 'gitMergeDevelop'"
-                //         }
-                //         withCredentials([gitUsernamePassword(credentialsId: 'github-token')]) {
-                //             sh '''
-                //             git checkout develop2
-                //             git merge release/release-v1-0-0
-                //             git push origin main2
-                //             git tag
-                //             '''
-                //         }
-                //     }
-                // }
+            // post {
+            //     success {
+            //         script {
+            //             STAGE = 'gitTagMaster '
+            //             sh 'echo "gitTagMaster"'
+            //         }
+            //         withCredentials([gitUsernamePassword(credentialsId: 'github-token')]) {
+            //             sh '''
+            //             git tag -a "v1-0-0" -m "Release 1-0-0"
+            //             git push origin "v1-0-0"
+            //             git show v1-0-0
+            //             '''
+            //         }
+            //         script {
+            //             STAGE = 'gitMergeMaster '
+            //             sh 'echo "gitMergeMaster" '
+            //         }
+            //         withCredentials([gitUsernamePassword(credentialsId: 'github-token')]) {
+            //             sh '''
+            //             git checkout main2
+            //             git merge release/release-v1-0-0
+            //             git push origin main2
+            //             git tag
+            //             '''
+            //         }
+            //         script {
+            //             STAGE = 'gitMergeDevelop '
+            //             sh "echo 'gitMergeDevelop'"
+            //         }
+            //         withCredentials([gitUsernamePassword(credentialsId: 'github-token')]) {
+            //             sh '''
+            //             git checkout develop2
+            //             git merge release/release-v1-0-0
+            //             git push origin main2
+            //             git tag
+            //             '''
+            //         }
+            //     }
+            // }
             }
         }
             post {
