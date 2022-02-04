@@ -25,8 +25,9 @@ def call(Map args) {
             }
             stage('Update POM') {
                 //- Este stage sólo debe estar disponible para la rama develop.
+                //- Upgrade version del pom.xml si corre develop
                 when {
-                    branch 'develop2'
+                    branch 'develop*'
                 }
                 steps {
                     sh "echo 'mvnUpdatePom'"
