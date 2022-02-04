@@ -16,7 +16,7 @@ def call(Map args) {
                         currentBuild.displayName = GIT_REPO_NAME + '-' + BRANCH_NAME + '-' + BUILD_NUMBER
                     }
                         ansiColor('xterm') {
-                        sh "echo '\033[34mHello\033[0m \033[33mcolorful\033[0m \033[35mworld!\033[0m'"
+                        sh 'Hola Mundo'
                         }
                     sh "echo 'branchname: '" + BRANCH_NAME
                         script { STAGE = '-1 logs ' }
