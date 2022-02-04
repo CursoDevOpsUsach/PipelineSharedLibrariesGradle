@@ -1,4 +1,4 @@
-def call(Map pipelineParameters) {
+def call() {
     pipeline {
         agent any
         environment {
