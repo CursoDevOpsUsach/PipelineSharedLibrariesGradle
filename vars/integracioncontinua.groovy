@@ -37,7 +37,7 @@ def call(Map pipelineParameters) {
                     script { STAGE = 'Compile ' }
                     sh "echo 'Compile Code!'"
                     // Run Maven on a Unix agent.
-                    // sh 'mvn clean compile -e'
+                    sh 'mvn clean compile -e'
                 }
             }
             stage('Unit Test') {
@@ -46,7 +46,7 @@ def call(Map pipelineParameters) {
                     script { STAGE = 'Unit Test ' }
                     sh "echo 'Test Code!'"
                     // Run Maven on a Unix agent.
-                    // sh 'mvn clean test -e'
+                    sh 'mvn clean test -e'
                 }
             }
             stage('Build jar') {
@@ -55,7 +55,7 @@ def call(Map pipelineParameters) {
                     script { STAGE = 'Build jar ' }
                     sh "echo 'Build .Jar!'"
                     // Run Maven on a Unix agent.
-                    // sh 'mvn clean package -e'
+                    sh 'mvn clean package -e'
                 }
             }
             stage('SonarQube') {
@@ -67,10 +67,10 @@ def call(Map pipelineParameters) {
                 steps {
                     script { STAGE = 'SonarQube ' }
                     sh "echo 'SonarQube'"
-                    // withSonarQubeEnv('sonarqube') {
-                    //     sh "echo 'SonarQube'"
-                    //     sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=covid-devops'
-                    // }
+                    withSonarQubeEnv('sonarqube') {
+                        sh "echo 'SonarQube'"
+                        sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=covid-devops'
+                    }
                 }
                 post {
                     //- Subir el artefacto creado al repositorio privado de Nexus.
@@ -78,37 +78,37 @@ def call(Map pipelineParameters) {
                     success {
                         script { STAGE = 'Subir a Nexus ' }
                         sh "echo 'Subir a nexus'"
-                        // nexusPublisher nexusInstanceId: 'nexus',
-                        //                      nexusRepositoryId: 'devops-usach-nexus',
-                        //                     packages: [[$class: 'MavenPackage',
-                        //                          mavenAssetList: [[classifier: '',
-                        //                                          extension: '',
-                        //                                          filePath: 'build/DevOpsUsach2020-0.0.1.jar']],
-                        //                          mavenCoordinate: [artifactId: 'DevOpsUsach2020',
-                        //                                          groupId: 'com.devopsusach2020',
-                        //                                          packaging: 'jar',
-                        //                                          version: VERSION]]]
+                        nexusPublisher nexusInstanceId: 'nexus',
+                                             nexusRepositoryId: 'devops-usach-nexus',
+                                            packages: [[$class: 'MavenPackage',
+                                                 mavenAssetList: [[classifier: '',
+                                                                 extension: '',
+                                                                 filePath: 'build/DevOpsUsach2020-0.0.1.jar']],
+                                                 mavenCoordinate: [artifactId: 'DevOpsUsach2020',
+                                                                 groupId: 'com.devopsusach2020',
+                                                                 packaging: 'jar',
+                                                                 version: VERSION]]]
                     }
                 }
             }
-        //        stage('Create Release') {
-        //            //- Crear rama release cuando todos los stages anteriores estén correctamente ejecutados.
-        //            //- Este stage sólo debe estar disponible para la rama develop.
-        //            when {
-        //                branch 'develop'
-        //            }
-        //            steps {
-        //                script { STAGE = 'Create Release ' }
-        //                sh "echo 'gitCreateRelease'"
-        //                withCredentials([gitUsernamePassword(credentialsId: 'github-token')]) {
-        //                    sh '''
-        //                        git checkout -b release/release-v$FINAL_VERSION
-        //                        git push origin release/release-v$FINAL_VERSION
-        //                       '''
-        //                }
-        //            //solo cuando es develop debo crear rama release.
-        //            }
-        //        }
+            //    stage('Create Release') {
+            //        //- Crear rama release cuando todos los stages anteriores estén correctamente ejecutados.
+            //        //- Este stage sólo debe estar disponible para la rama develop.
+            //        when {
+            //            branch 'develop'
+            //        }
+            //        steps {
+            //            script { STAGE = 'Create Release ' }
+            //            sh "echo 'gitCreateRelease'"
+            //            withCredentials([gitUsernamePassword(credentialsId: 'github-token')]) {
+            //                sh '''
+            //                    git checkout -b release/release-v$FINAL_VERSION
+            //                    git push origin release/release-v$FINAL_VERSION
+            //                   '''
+            //            }
+            //        //solo cuando es develop debo crear rama release.
+            //        }
+            //    }
         }
 
         post {
