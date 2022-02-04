@@ -42,7 +42,7 @@ def call(Map args) {
                     script { STAGE = 'Compile ' }
                     sh "echo 'Compile Code!'"
                     // Run Maven on a Unix agent.
-                    sh 'mvn clean compile -e'
+                    // sh 'mvn clean compile -e'
                 }
             }
             stage('Unit Test') {
@@ -51,7 +51,7 @@ def call(Map args) {
                     script { STAGE = 'Unit Test ' }
                     sh "echo 'Test Code!'"
                     // Run Maven on a Unix agent.
-                    sh 'mvn clean test -e'
+                    // sh 'mvn clean test -e'
                 }
             }
             stage('Build jar') {
@@ -60,7 +60,7 @@ def call(Map args) {
                     script { STAGE = 'Build jar ' }
                     sh "echo 'Build .Jar!'"
                     // Run Maven on a Unix agent.
-                    sh 'mvn clean package -e'
+                    // sh 'mvn clean package -e'
                 }
             }
             stage('SonarQube') {
