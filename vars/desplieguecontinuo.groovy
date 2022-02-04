@@ -30,7 +30,7 @@ def call(Map args) {
                     }
                     sh 'sleep 5 '
                     sh 'echo nexusDownload'
-                    sh "curl -X GET -u $NEXUS_USER:$NEXUS_PASSWORD http://nexus:8081/repository/ms-iclab/com/devopsusach2020/DevOpsUsach2020/${mavenPom.version}/DevOpsUsach2020-${mavenPom.version}.jar -O"
+                    sh 'curl -X GET -u $NEXUS_USER:$NEXUS_PASSWORD http://nexus:8081/repository/ms-iclab/com/devopsusach2020/DevOpsUsach2020/$POM_VERSION/DevOpsUsach2020-$POM_VERSION.jar -O'
                 }
             }
             stage('Run Jar') {
@@ -47,49 +47,49 @@ def call(Map args) {
                 steps {
                     script { STAGE = 'test ' }
                     sh 'echo Test Curl'
-                    // sh "sleep 30 && curl -X GET 'http://localhost:8081/rest/mscovid/test?msg=testing'"
-                    // sh "sleep 5 && curl -X GET 'http://localhost:8081/rest/mscovid/estadoMundial'"
-                    // sh "sleep 5 && curl -X GET 'http://localhost:8081/rest/mscovid/estadoPais?pais=chile'"
+                    sh "sleep 30 && curl -X GET 'http://localhost:8081/rest/mscovid/test?msg=testing'"
+                    sh "sleep 5 && curl -X GET 'http://localhost:8081/rest/mscovid/estadoMundial'"
+                    sh "sleep 5 && curl -X GET 'http://localhost:8081/rest/mscovid/estadoPais?pais=chile'"
                 }
-                post {
-                    success {
-                        script {
-                            STAGE = 'gitTagMaster '
-                            sh 'echo "gitTagMaster"'
-                        }
-                        withCredentials([gitUsernamePassword(credentialsId: 'github-token')]) {
-                            sh '''
-                            git tag -a "v1-0-0" -m "Release 1-0-0"
-                            git push origin "v1-0-0"
-                            git show v1-0-0
-                            '''
-                        }
-                        script {
-                            STAGE = 'gitMergeMaster '
-                            sh 'echo "gitMergeMaster" '
-                        }
-                        withCredentials([gitUsernamePassword(credentialsId: 'github-token')]) {
-                            sh '''
-                            git checkout main2
-                            git merge release/release-v1-0-0
-                            git push origin main2
-                            git tag
-                            '''
-                        }
-                        script {
-                            STAGE = 'gitMergeDevelop '
-                            sh "echo 'gitMergeDevelop'"
-                        }
-                        withCredentials([gitUsernamePassword(credentialsId: 'github-token')]) {
-                            sh '''
-                            git checkout develop2
-                            git merge release/release-v1-0-0
-                            git push origin main2
-                            git tag
-                            '''
-                        }
-                    }
-                }
+                // post {
+                //     success {
+                //         script {
+                //             STAGE = 'gitTagMaster '
+                //             sh 'echo "gitTagMaster"'
+                //         }
+                //         withCredentials([gitUsernamePassword(credentialsId: 'github-token')]) {
+                //             sh '''
+                //             git tag -a "v1-0-0" -m "Release 1-0-0"
+                //             git push origin "v1-0-0"
+                //             git show v1-0-0
+                //             '''
+                //         }
+                //         script {
+                //             STAGE = 'gitMergeMaster '
+                //             sh 'echo "gitMergeMaster" '
+                //         }
+                //         withCredentials([gitUsernamePassword(credentialsId: 'github-token')]) {
+                //             sh '''
+                //             git checkout main2
+                //             git merge release/release-v1-0-0
+                //             git push origin main2
+                //             git tag
+                //             '''
+                //         }
+                //         script {
+                //             STAGE = 'gitMergeDevelop '
+                //             sh "echo 'gitMergeDevelop'"
+                //         }
+                //         withCredentials([gitUsernamePassword(credentialsId: 'github-token')]) {
+                //             sh '''
+                //             git checkout develop2
+                //             git merge release/release-v1-0-0
+                //             git push origin main2
+                //             git tag
+                //             '''
+                //         }
+                //     }
+                // }
             }
         }
             post {
