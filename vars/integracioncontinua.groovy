@@ -26,7 +26,7 @@ def call(Map args) {
             stage('Update POM') {
                 //- Este stage sólo debe estar disponible para la rama develop.
                 when {
-                    branch 'develop'
+                    branch 'develop2'
                 }
                 steps {
                     sh "echo 'mvnUpdatePom'"
