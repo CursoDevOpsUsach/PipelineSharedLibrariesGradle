@@ -79,7 +79,7 @@ def call() {
                         script { STAGE = 'Subir a Nexus ' }
                         sh "echo 'Subir a nexus'"
                         nexusPublisher nexusInstanceId: 'nexus',
-                                             nexusRepositoryId: 'ms-iclabs',
+                                             nexusRepositoryId: 'DevOpsUsach2020',
                                             packages: [[$class: 'MavenPackage',
                                                  mavenAssetList: [[classifier: '',
                                                                  extension: '',
