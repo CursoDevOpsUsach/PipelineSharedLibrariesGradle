@@ -52,10 +52,7 @@ def call(Map args) {
             stage('Build jar') {
                 //- Generar artefacto del código compilado.
                 steps {
-                    script {
-                        STAGE = 'Build jar '
-                        error('file dont exist :( ')
-                        }
+                    script { STAGE = 'Build jar ' }
                     sh "echo 'Build .Jar!'"
                     // Run Maven on a Unix agent.
                     sh 'mvn clean package -e'
