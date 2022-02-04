@@ -30,7 +30,7 @@ def call(Map args) {
                 steps {
                     script { STAGE = 'gitDiff ' }
                     sh 'echo gitDiff'
-                // sh 'git diff release/release-v1-0-0 origin/main'
+                    sh 'git diff release/release-v1-0-0 origin/main'
                 }
             }
             stage('nexusDownload') {
@@ -65,45 +65,45 @@ def call(Map args) {
                     sh "sleep 5 && curl -X GET 'http://localhost:8081/rest/mscovid/estadoMundial'"
                     sh "sleep 5 && curl -X GET 'http://localhost:8081/rest/mscovid/estadoPais?pais=chile'"
                 }
-            // post {
-            //     success {
-            //         script {
-            //             STAGE = 'gitTagMaster '
-            //             sh 'echo "gitTagMaster"'
-            //         }
-            //         withCredentials([gitUsernamePassword(credentialsId: 'github-token')]) {
-            //             sh '''
-            //             git tag -a "v1-0-0" -m "Release 1-0-0"
-            //             git push origin "v1-0-0"
-            //             git show v1-0-0
-            //             '''
-            //         }
-            //         script {
-            //             STAGE = 'gitMergeMaster '
-            //             sh 'echo "gitMergeMaster" '
-            //         }
-            //         withCredentials([gitUsernamePassword(credentialsId: 'github-token')]) {
-            //             sh '''
-            //             git checkout main2
-            //             git merge release/release-v1-0-0
-            //             git push origin main2
-            //             git tag
-            //             '''
-            //         }
-            //         script {
-            //             STAGE = 'gitMergeDevelop '
-            //             sh "echo 'gitMergeDevelop'"
-            //         }
-            //         withCredentials([gitUsernamePassword(credentialsId: 'github-token')]) {
-            //             sh '''
-            //             git checkout develop2
-            //             git merge release/release-v1-0-0
-            //             git push origin main2
-            //             git tag
-            //             '''
-            //         }
-            //     }
-            // }
+                post {
+                    success {
+                        script {
+                            STAGE = 'gitTagMaster '
+                            sh 'echo "gitTagMaster"'
+                        }
+                        withCredentials([gitUsernamePassword(credentialsId: 'github-token')]) {
+                            sh '''
+                        git tag -a "v1-0-0" -m "Release 1-0-0"
+                        git push origin "v1-0-0"
+                        git show v1-0-0
+                        '''
+                        }
+                        script {
+                            STAGE = 'gitMergeMaster '
+                            sh 'echo "gitMergeMaster" '
+                        }
+                        withCredentials([gitUsernamePassword(credentialsId: 'github-token')]) {
+                            sh '''
+                        git checkout main2
+                        git merge release/release-v1-0-0
+                        git push origin main2
+                        git tag
+                        '''
+                        }
+                        script {
+                            STAGE = 'gitMergeDevelop '
+                            sh "echo 'gitMergeDevelop'"
+                        }
+                        withCredentials([gitUsernamePassword(credentialsId: 'github-token')]) {
+                            sh '''
+                        git checkout develop2
+                        git merge release/release-v1-0-0
+                        git push origin main2
+                        git tag
+                        '''
+                        }
+                    }
+                }
             }
         }
             post {
