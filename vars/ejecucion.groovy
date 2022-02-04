@@ -1,10 +1,12 @@
 def call() {
     if ((env.BRANCH_NAME =~ '.*feature.*').matches() || (env.BRANCH_NAME =~ '.*develop.*').matches() ) {
+        figlet 'Running CI'
         echo 'Rama Feature o develop'
         integracioncontinua.call(
         VERSION:'0.0.16'
     )
 } else if ((env.BRANCH_NAME =~ '.*release.*').matches()) {
+        'Running CD'
         echo 'Rama Release'
         desplieguecontinuo.call(
         VERSION:'0.0.16'
