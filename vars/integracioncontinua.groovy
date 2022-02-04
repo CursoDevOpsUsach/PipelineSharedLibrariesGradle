@@ -79,7 +79,7 @@ def call(Map pipelineParameters) {
                         script { STAGE = 'Subir a Nexus ' }
                         sh "echo 'Subir a nexus'"
                         nexusPublisher nexusInstanceId: 'nexus',
-                                             nexusRepositoryId: 'devops-usach-nexus',
+                                             nexusRepositoryId: 'ms-iclabs',
                                             packages: [[$class: 'MavenPackage',
                                                  mavenAssetList: [[classifier: '',
                                                                  extension: '',
