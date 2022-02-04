@@ -113,7 +113,8 @@ def call(Map args) {
                 steps {
                     script {
                         STAGE = 'Subir a Nexus '
-                        def  mavenPom = readMavenPom file: 'pom.xml'
+                        mavenPom = readMavenPom file: 'pom.xml'
+                        sh "echo ${mavenPom.version}"
                     }
                     sh "echo 'Subir a nexus'"
                     nexusPublisher nexusInstanceId: 'nexus',
