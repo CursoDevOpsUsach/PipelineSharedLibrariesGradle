@@ -31,33 +31,33 @@ def call() {
                         }
                     }
             }
-            stage('Compile') {
-                //- Compilar el código con comando maven
-                steps {
-                    script { STAGE = 'Compile ' }
-                    sh "echo 'Compile Code!'"
-                    // Run Maven on a Unix agent.
-                    sh 'mvn clean compile -e'
-                }
-            }
-            stage('Unit Test') {
-                //- Testear el código con comando maven
-                steps {
-                    script { STAGE = 'Unit Test ' }
-                    sh "echo 'Test Code!'"
-                    // Run Maven on a Unix agent.
-                    sh 'mvn clean test -e'
-                }
-            }
-            stage('Build jar') {
-                //- Generar artefacto del código compilado.
-                steps {
-                    script { STAGE = 'Build jar ' }
-                    sh "echo 'Build .Jar!'"
-                    // Run Maven on a Unix agent.
-                    sh 'mvn clean package -e'
-                }
-            }
+            // stage('Compile') {
+            //     //- Compilar el código con comando maven
+            //     steps {
+            //         script { STAGE = 'Compile ' }
+            //         sh "echo 'Compile Code!'"
+            //         // Run Maven on a Unix agent.
+            //         sh 'mvn clean compile -e'
+            //     }
+            // }
+            // stage('Unit Test') {
+            //     //- Testear el código con comando maven
+            //     steps {
+            //         script { STAGE = 'Unit Test ' }
+            //         sh "echo 'Test Code!'"
+            //         // Run Maven on a Unix agent.
+            //         sh 'mvn clean test -e'
+            //     }
+            // }
+            // stage('Build jar') {
+            //     //- Generar artefacto del código compilado.
+            //     steps {
+            //         script { STAGE = 'Build jar ' }
+            //         sh "echo 'Build .Jar!'"
+            //         // Run Maven on a Unix agent.
+            //         sh 'mvn clean package -e'
+            //     }
+            // }
             stage('SonarQube') {
                 //- Generar análisis con sonar para cada ejecución
                 //- Cada ejecución debe tener el siguiente formato de nombre: QUE ES EL NOMBRE DE EJECUCIÓN ??
@@ -67,10 +67,10 @@ def call() {
                 steps {
                     script { STAGE = 'SonarQube ' }
                     sh "echo 'SonarQube'"
-                    withSonarQubeEnv('sonarqube') {
-                        sh "echo 'SonarQube'"
-                        sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=covid-devops'
-                    }
+                    // withSonarQubeEnv('sonarqube') {
+                    //     sh "echo 'SonarQube'"
+                    //     sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=covid-devops'
+                    // }
                 }
                 post {
                     //- Subir el artefacto creado al repositorio privado de Nexus.
@@ -79,7 +79,7 @@ def call() {
                         script { STAGE = 'Subir a Nexus ' }
                         sh "echo 'Subir a nexus'"
                         nexusPublisher nexusInstanceId: 'nexus',
-                                             nexusRepositoryId: 'DevOpsUsach2020',
+                                             nexusRepositoryId: 'devops-usach-nexus',
                                             packages: [[$class: 'MavenPackage',
                                                  mavenAssetList: [[classifier: '',
                                                                  extension: '',
