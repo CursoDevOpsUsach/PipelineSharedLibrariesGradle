@@ -11,10 +11,10 @@ def call(Map args) {
         stages {
             stage('-1 logs') {
                 steps {
-                    // script {
-                    //     currentBuild.displayName = "#${BUILD_NUMBER}, branch ${BRANCH}"
-                    // }
-                    // sh 'currentBuild.displayName'
+                    script {
+                        currentBuild.displayName = "#${BUILD_NUMBER}, branch ${BRANCH}"
+                    }
+                    sh 'currentBuild.displayName'
                     sh "echo 'branchname: '" + BRANCH_NAME
                         script { STAGE = '-1 logs ' }
                 }
