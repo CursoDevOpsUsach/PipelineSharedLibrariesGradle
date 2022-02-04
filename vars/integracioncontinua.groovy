@@ -1,4 +1,5 @@
 def call(Map args) {
+    currentBuild.displayName = "#${BUILD_NUMBER}, branch ${BRANCH}"
     pipeline {
         agent any
         environment {
@@ -11,6 +12,10 @@ def call(Map args) {
         stages {
             stage('-1 logs') {
                 steps {
+                    script {
+                        currentBuild.displayName = "#${BUILD_NUMBER}, branch ${BRANCH}"
+                    }
+                    sh 'currentBuild.displayName'
                     sh "echo 'branchname: '" + BRANCH_NAME
                         script { STAGE = '-1 logs ' }
                 }
@@ -96,16 +101,16 @@ def call(Map args) {
                 steps {
                     script { STAGE = 'Subir a Nexus ' }
                     sh "echo 'Subir a nexus'"
-                    nexusPublisher nexusInstanceId: 'nexus',
-                                         nexusRepositoryId: 'ms-iclab',
-                                        packages: [[$class: 'MavenPackage',
-                                                    mavenAssetList: [[classifier: '',
-                                                                    extension: '',
-                                                                    filePath: 'build/DevOpsUsach2020-0.0.1.jar']],
-                                                    mavenCoordinate: [artifactId: 'DevOpsUsach2020',
-                                                                    groupId: 'com.devopsusach2020',
-                                                                    packaging: 'jar',
-                                                                    version: '0.0.1']]]
+                // nexusPublisher nexusInstanceId: 'nexus',
+                //                      nexusRepositoryId: 'ms-iclab',
+                //                     packages: [[$class: 'MavenPackage',
+                //                                 mavenAssetList: [[classifier: '',
+                //                                                 extension: '',
+                //                                                 filePath: 'build/DevOpsUsach2020-0.0.1.jar']],
+                //                                 mavenCoordinate: [artifactId: 'DevOpsUsach2020',
+                //                                                 groupId: 'com.devopsusach2020',
+                //                                                 packaging: 'jar',
+                //                                                 version: '0.0.1']]]
                 }
             }
         //    stage('Create Release') {
