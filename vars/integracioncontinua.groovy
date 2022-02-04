@@ -11,12 +11,29 @@ def call(Map args) {
         stages {
             stage('-1 logs') {
                 steps {
+                    //- Generar análisis con sonar para cada ejecución
+                    //- Cada ejecución debe tener el siguiente formato de nombre:
+                    //- {nombreRepo}-{rama}-{numeroEjecucion} ejemplo:
+                    //- ms-iclab-feature-estadomundial(Si está usando el CRUD ms-iclab-feature-[nombre de su crud])
                     script {
                         env.GIT_REPO_NAME = env.GIT_URL.replaceFirst(/^.*\/([^\/]+?).git$/, '$1')
                         currentBuild.displayName = GIT_REPO_NAME + '-' + BRANCH_NAME + '-' + BUILD_NUMBER
                     }
                     sh "echo 'branchname: '" + BRANCH_NAME
                         script { STAGE = '-1 logs ' }
+                }
+            }
+            stage('Update POM') {
+                //- Este stage sólo debe estar disponible para la rama develop.
+                when {
+                    branch 'develop'
+                }
+                steps {
+                    sh "echo 'mvnUpdatePom'"
+                    script {
+                        STAGE = 'Update POM '
+                        sh 'mvn versions:set -DnewVersion=1.0.0'
+                    }
                 }
             }
             stage('Validate Maven Files') {
@@ -40,8 +57,8 @@ def call(Map args) {
                 steps {
                     script { STAGE = 'Compile ' }
                     sh "echo 'Compile Code!'"
-                    // Run Maven on a Unix agent.
-                    // sh 'mvn clean compile -e'
+                // Run Maven on a Unix agent.
+                // sh 'mvn clean compile -e'
                 }
             }
             stage('Unit Test') {
@@ -49,8 +66,8 @@ def call(Map args) {
                 steps {
                     script { STAGE = 'Unit Test ' }
                     sh "echo 'Test Code!'"
-                    // Run Maven on a Unix agent.
-                    // sh 'mvn clean test -e'
+                // Run Maven on a Unix agent.
+                // sh 'mvn clean test -e'
                 }
             }
             stage('Build jar') {
@@ -59,14 +76,10 @@ def call(Map args) {
                     script { STAGE = 'Build jar ' }
                     sh "echo 'Build .Jar!'"
                     // Run Maven on a Unix agent.
-                    // sh 'mvn clean package -e'
+                    sh 'mvn clean package -e'
                 }
             }
             stage('SonarQube') {
-                //- Generar análisis con sonar para cada ejecución
-                //- Cada ejecución debe tener el siguiente formato de nombre: QUE ES EL NOMBRE DE EJECUCIÓN ??
-                //- {nombreRepo}-{rama}-{numeroEjecucion} ejemplo:
-                //- ms-iclab-feature-estadomundial(Si está usando el CRUD ms-iclab-feature-[nombre de su crud])
                 steps {
                     script { STAGE = 'SonarQube ' }
                     sh "echo 'SonarQube'"
@@ -86,11 +99,11 @@ def call(Map args) {
             //                             packages: [[$class: 'MavenPackage',
             //                                  mavenAssetList: [[classifier: '',
             //                                                  extension: '',
-            //                                                  filePath: 'build/DevOpsUsach2020-0.0.1.jar']],
+            //                                                  filePath: 'build/DevOpsUsach2020-${POM_VERSION}.jar']],
             //                                  mavenCoordinate: [artifactId: 'DevOpsUsach2020',
             //                                                  groupId: 'com.devopsusach2020',
             //                                                  packaging: 'jar',
-            //                                                  version: '0.0.1']]]
+            //                                                  version: ${POM_VERSION}]]]
             //     }
             // }
             }
@@ -100,16 +113,16 @@ def call(Map args) {
                 steps {
                     script { STAGE = 'Subir a Nexus ' }
                     sh "echo 'Subir a nexus'"
-                // nexusPublisher nexusInstanceId: 'nexus',
-                //                      nexusRepositoryId: 'ms-iclab',
-                //                     packages: [[$class: 'MavenPackage',
-                //                                 mavenAssetList: [[classifier: '',
-                //                                                 extension: '',
-                //                                                 filePath: 'build/DevOpsUsach2020-0.0.1.jar']],
-                //                                 mavenCoordinate: [artifactId: 'DevOpsUsach2020',
-                //                                                 groupId: 'com.devopsusach2020',
-                //                                                 packaging: 'jar',
-                //                                                 version: '0.0.1']]]
+                    nexusPublisher nexusInstanceId: 'nexus',
+                                     nexusRepositoryId: 'ms-iclab',
+                                    packages: [[$class: 'MavenPackage',
+                                                mavenAssetList: [[classifier: '',
+                                                                extension: '',
+                                                                filePath: 'build/DevOpsUsach2020-${POM_VERSION}.jar']],
+                                                mavenCoordinate: [artifactId: 'DevOpsUsach2020',
+                                                                groupId: 'com.devopsusach2020',
+                                                                packaging: 'jar',
+                                                                version: ${ POM_VERSION }]]]
                 }
             }
         //    stage('Create Release') {
