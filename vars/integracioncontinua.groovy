@@ -12,7 +12,7 @@ def call(Map args) {
             stage('-1 logs') {
                 steps {
                     script {
-                        currentBuild.displayName = "#${BUILD_NUMBER}, branch ${BRANCH}"
+                        currentBuild.displayName = 'The name.'
                     }
                     sh 'currentBuild.displayName'
                     sh "echo 'branchname: '" + BRANCH_NAME
