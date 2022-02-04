@@ -84,10 +84,10 @@ def call(Map args) {
                 steps {
                     script { STAGE = 'SonarQube ' }
                     sh "echo 'SonarQube'"
-                // withSonarQubeEnv('sonarqube') {
-                //     sh "echo 'SonarQube'"
-                //     sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=covid-devops'
-                // }
+                    withSonarQubeEnv('sonarqube') {
+                        sh "echo 'SonarQube'"
+                        sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=covid-devops'
+                    }
                 }
             // post {
             //     //- Subir el artefacto creado al repositorio privado de Nexus.
