@@ -1,4 +1,4 @@
-def call(Map pipelineParameters) {
+def call(Map args) {
     pipeline {
         agent any
         environment {
@@ -22,10 +22,13 @@ def call(Map pipelineParameters) {
             stage('nexusDownload') {
                 //- Descargar el artefacto creado al workspace de la ejecución del pipeline.
                 steps {
-                    script { STAGE = 'nexusDownload ' }
+                    script {
+                        STAGE = 'nexusDownload '
+                        mavenPom = readMavenPom file: 'pom.xml'
+                    }
                     sh 'sleep 5 '
                     sh 'echo nexusDownload'
-                    sh 'curl -X GET -u $NEXUS_USER:$NEXUS_PASSWORD http://nexus:8081/repository/devops-usach-nexus/com/devopsusach2020/DevOpsUsach2020/$VERSION/DevOpsUsach2020-$VERSION.jar -O'
+                    sh "curl -X GET -u $NEXUS_USER:$NEXUS_PASSWORD http://nexus:8081/repository/ms-iclab/com/devopsusach2020/DevOpsUsach2020/${mavenPom.version}/DevOpsUsach2020-${mavenPom.version}.jar -O"
                 }
             }
             stage('Run Jar') {
@@ -43,6 +46,8 @@ def call(Map pipelineParameters) {
                     script { STAGE = 'test ' }
                     sh 'echo Test Curl'
                     sh "sleep 30 && curl -X GET 'http://localhost:8081/rest/mscovid/test?msg=testing'"
+                    sh "sleep 5 && curl -X GET 'http://localhost:8081/rest/mscovid/estadoMundial'"
+                    sh "sleep 5 && curl -X GET 'http://localhost:8081/rest/mscovid/estadoPais?pais=chile'"
                 }
                 post {
                     success {
