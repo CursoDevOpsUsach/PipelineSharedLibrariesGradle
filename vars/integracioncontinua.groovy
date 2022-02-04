@@ -1,5 +1,4 @@
 def call(Map args) {
-    currentBuild.displayName = "#${BUILD_NUMBER}, branch ${BRANCH}"
     pipeline {
         agent any
         environment {
