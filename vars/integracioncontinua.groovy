@@ -71,24 +71,24 @@ def call(Map args) {
                 //     sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=covid-devops'
                 // }
                 }
-                // post {
-                //     //- Subir el artefacto creado al repositorio privado de Nexus.
-                //     //- Ejecutar este paso solo si los pasos anteriores se ejecutan de manera correcta.
-                //     success {
-                //         script { STAGE = 'Subir a Nexus ' }
-                //         sh "echo 'Subir a nexus'"
-                //         nexusPublisher nexusInstanceId: 'nexus',
-                //                              nexusRepositoryId: 'ms-iclab',
-                //                             packages: [[$class: 'MavenPackage',
-                //                                  mavenAssetList: [[classifier: '',
-                //                                                  extension: '',
-                //                                                  filePath: 'build/DevOpsUsach2020-0.0.1.jar']],
-                //                                  mavenCoordinate: [artifactId: 'DevOpsUsach2020',
-                //                                                  groupId: 'com.devopsusach2020',
-                //                                                  packaging: 'jar',
-                //                                                  version: '0.0.1']]]
-                //     }
-                // }
+            // post {
+            //     //- Subir el artefacto creado al repositorio privado de Nexus.
+            //     //- Ejecutar este paso solo si los pasos anteriores se ejecutan de manera correcta.
+            //     success {
+            //         script { STAGE = 'Subir a Nexus ' }
+            //         sh "echo 'Subir a nexus'"
+            //         nexusPublisher nexusInstanceId: 'nexus',
+            //                              nexusRepositoryId: 'ms-iclab',
+            //                             packages: [[$class: 'MavenPackage',
+            //                                  mavenAssetList: [[classifier: '',
+            //                                                  extension: '',
+            //                                                  filePath: 'build/DevOpsUsach2020-0.0.1.jar']],
+            //                                  mavenCoordinate: [artifactId: 'DevOpsUsach2020',
+            //                                                  groupId: 'com.devopsusach2020',
+            //                                                  packaging: 'jar',
+            //                                                  version: '0.0.1']]]
+            //     }
+            // }
             }
             stage('Nexus') {
                 //- Subir el artefacto creado al repositorio privado de Nexus.
@@ -141,6 +141,9 @@ def call(Map args) {
             //             message: "[Grupo5][PIPELINE IC][${env.BRANCH_NAME}][Stage: ${STAGE}][Resultado: No OK]",
             //             tokenCredentialId: SLACK_TOKEN)
             // }
+            always {
+                echo 'I will always execute this!'
+            }
         }
     }
 }
