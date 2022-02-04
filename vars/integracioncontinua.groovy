@@ -87,7 +87,7 @@ def call() {
                                                  mavenCoordinate: [artifactId: 'DevOpsUsach2020',
                                                                  groupId: 'com.devopsusach2020',
                                                                  packaging: 'jar',
-                                                                 version: VERSION]]]
+                                                                 version: '0.0.1']]]
                     }
                 }
             }
