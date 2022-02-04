@@ -10,39 +10,39 @@ def call(Map pipelineParameters) {
             STAGE = ' '
         }
         stages {
-            stage('gitDiff') {
-                //- Mostrar por pantalla las diferencias entre la rama release en curso y la rama
-                //master.(Opcional)
-                steps {
-                    script { STAGE = 'gitDiff ' }
-                    sh 'echo gitDiff'
-                    sh 'git diff release/release-v1-0-0 origin/main'
-                }
-            }
-            stage('nexusDownload') {
-                //- Descargar el artefacto creado al workspace de la ejecución del pipeline.
-                steps {
-                    script { STAGE = 'nexusDownload ' }
-                    sh 'sleep 5 '
-                    sh 'echo nexusDownload'
-                //sh 'curl -X GET -u $NEXUS_USER:$NEXUS_PASSWORD http://nexus:8081/repository/devops-usach-nexus/com/devopsusach2020/DevOpsUsach2020/$VERSION/DevOpsUsach2020-$VERSION.jar -O'
-                }
-            }
-            stage('Run Jar') {
-                //- Ejecutar artefacto descargado.
-                steps {
-                    script { STAGE = 'Run Jar ' }
-                    sh 'echo Run Jar'
-                //                  sh 'nohup java -jar DevOpsUsach2020-$VERSION.jar & >/dev/null'
-                }
-            }
+            // stage('gitDiff') {
+            //     //- Mostrar por pantalla las diferencias entre la rama release en curso y la rama
+            //     //master.(Opcional)
+            //     steps {
+            //         script { STAGE = 'gitDiff ' }
+            //         sh 'echo gitDiff'
+            //         sh 'git diff release/release-v1-0-0 origin/main'
+            //     }
+            // }
+            // stage('nexusDownload') {
+            //     //- Descargar el artefacto creado al workspace de la ejecución del pipeline.
+            //     steps {
+            //         script { STAGE = 'nexusDownload ' }
+            //         sh 'sleep 5 '
+            //         sh 'echo nexusDownload'
+            //         sh 'curl -X GET -u $NEXUS_USER:$NEXUS_PASSWORD http://nexus:8081/repository/devops-usach-nexus/com/devopsusach2020/DevOpsUsach2020/$VERSION/DevOpsUsach2020-$VERSION.jar -O'
+            //     }
+            // }
+            // stage('Run Jar') {
+            //     //- Ejecutar artefacto descargado.
+            //     steps {
+            //         script { STAGE = 'Run Jar ' }
+            //         sh 'echo Run Jar'
+            //         sh 'nohup java -jar DevOpsUsach2020-$VERSION.jar & >/dev/null'
+            //     }
+            // }
             stage('test') {
                 //- Realizar llamado a microservicio expuesto en local para cada uno de sus
                 //métodos y mostrar los resultados.
                 steps {
                     script { STAGE = 'test ' }
                     sh 'echo Test Curl'
-                //                  sh "sleep 30 && curl -X GET 'http://localhost:8081/rest/mscovid/test?msg=testing'"
+                    // sh "sleep 30 && curl -X GET 'http://localhost:8081/rest/mscovid/test?msg=testing'"
                 }
                 post {
                     success {
@@ -50,6 +50,8 @@ def call(Map pipelineParameters) {
                             STAGE = 'gitTagMaster '
                             sh 'echo "gitTagMaster"'
                             sh 'git tag -a "v1-0-0" -m "Release 1-0-0"'
+                            sh 'git push origin "v1-0-0"'
+                            sh 'git show v1-0-0'
                         }
                         script {
                             STAGE = 'gitMergeMaster '
@@ -60,22 +62,21 @@ def call(Map pipelineParameters) {
                             git checkout main2
                             git merge release/release-v1-0-0
                             git push origin main2
-                            git push origin "v1-0-0"
-                            git show v1-0-0
-
+                            git tag
                             '''
                         }
-//                        script {
-//                            STAGE = 'gitMergeDevelop '
-//                            sh "echo 'gitMergeDevelop'"
-//                        }
-//                        withCredentials([gitUsernamePassword(credentialsId: 'github-token')]) {
-//                            sh '''
-//                            git checkout develop
-//                            git merge release/release-v1-0-0
-//                            git tag
-//                            '''
-//                        }
+                        script {
+                            STAGE = 'gitMergeDevelop '
+                            sh "echo 'gitMergeDevelop'"
+                        }
+                        withCredentials([gitUsernamePassword(credentialsId: 'github-token')]) {
+                            sh '''
+                            git checkout develop2
+                            git merge release/release-v1-0-0
+                            git push origin main2
+                            git tag
+                            '''
+                        }
                     }
                 }
             }
