@@ -111,18 +111,21 @@ def call(Map args) {
                 //- Subir el artefacto creado al repositorio privado de Nexus.
                 //- Ejecutar este paso solo si los pasos anteriores se ejecutan de manera correcta.
                 steps {
-                    script { STAGE = 'Subir a Nexus ' }
+                    script {
+                        STAGE = 'Subir a Nexus '
+                        def  mavenPom = readMavenPom file: 'pom.xml'
+                    }
                     sh "echo 'Subir a nexus'"
                     nexusPublisher nexusInstanceId: 'nexus',
                                      nexusRepositoryId: 'ms-iclab',
                                     packages: [[$class: 'MavenPackage',
                                                 mavenAssetList: [[classifier: '',
                                                                 extension: '',
-                                                                filePath: "build/DevOpsUsach2020-${POM_VERSION}.jar"]],
+                                                                filePath: 'build/DevOpsUsach2020-0.0.1.jar']],
                                                 mavenCoordinate: [artifactId: 'DevOpsUsach2020',
                                                                 groupId: 'com.devopsusach2020',
                                                                 packaging: 'jar',
-                                                                version: ${ POM_VERSION }]]]
+                                                                version: '0.0.1']]]
                 }
             }
         //    stage('Create Release') {
