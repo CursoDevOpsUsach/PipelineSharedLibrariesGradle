@@ -14,7 +14,7 @@ def call(Map args) {
                     script {
                         currentBuild.displayName = 'The name.'
                     }
-                    sh 'currentBuild.displayName'
+                    sh 'echo currentBuild.displayName'
                     sh "echo 'branchname: '" + BRANCH_NAME
                         script { STAGE = '-1 logs ' }
                 }
