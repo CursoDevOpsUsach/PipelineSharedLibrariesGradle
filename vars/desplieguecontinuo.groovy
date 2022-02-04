@@ -4,7 +4,6 @@ def call(Map args) {
         environment {
             NEXUS_USER = credentials('usernexusadmin')
             NEXUS_PASSWORD = credentials('passnexusadmin')
-            SLACK_TOKEN = 'slack-duribef'
             STAGE = ' '
         }
         stages {
@@ -108,14 +107,14 @@ def call(Map args) {
                 success {
                     slackSend(
                         color: 'good',
-                        message: "[Grupo5][PIPELINE Release][${env.BRANCH_NAME}][Stage: ${STAGE}][Resultado: Ok]",
-                        tokenCredentialId: SLACK_TOKEN)
+                        message: "[Grupo5][PIPELINE Release][${env.BRANCH_NAME}][Stage: ${STAGE}][Resultado: Ok]"
+                    )
                 }
                 failure {
                     slackSend(
                         color: 'danger',
-                        message: "[Grupo5][PIPELINE Release][${env.BRANCH_NAME}][Stage: ${STAGE}][Resultado: No OK]",
-                        tokenCredentialId: SLACK_TOKEN)
+                        message: "[Grupo5][PIPELINE Release][${env.BRANCH_NAME}][Stage: ${STAGE}][Resultado: No OK]"
+                        )
                 }
             }
     }
