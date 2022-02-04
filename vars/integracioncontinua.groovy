@@ -23,7 +23,7 @@ def call(Map args) {
                         script { STAGE = '-1 logs ' }
                 }
             }
-            stage('Validate Maven Files') {
+            stage('Validate mvn') {
                 when {
                         anyOf {
                                 not { expression { fileExists ('pom.xml') } }
