@@ -58,19 +58,18 @@ def call() {
                     sh 'mvn clean package -e'
                 }
             }
-            stage('SonarQube') {
+            stage('SonarQube y Nexus') {
                 //- Generar análisis con sonar para cada ejecución
                 //- Cada ejecución debe tener el siguiente formato de nombre: QUE ES EL NOMBRE DE EJECUCIÓN ??
                 //- {nombreRepo}-{rama}-{numeroEjecucion} ejemplo:
                 //- ms-iclab-feature-estadomundial(Si está usando el CRUD ms-iclab-feature-[nombre de su crud])
-
                 steps {
                     script { STAGE = 'SonarQube ' }
                     sh "echo 'SonarQube'"
-                    // withSonarQubeEnv('sonarqube') {
-                    //     sh "echo 'SonarQube'"
-                    //     sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=covid-devops'
-                    // }
+                // withSonarQubeEnv('sonarqube') {
+                //     sh "echo 'SonarQube'"
+                //     sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=covid-devops'
+                // }
                 }
                 post {
                     //- Subir el artefacto creado al repositorio privado de Nexus.
@@ -79,7 +78,7 @@ def call() {
                         script { STAGE = 'Subir a Nexus ' }
                         sh "echo 'Subir a nexus'"
                         nexusPublisher nexusInstanceId: 'nexus',
-                                             nexusRepositoryId: 'laboratorio-covid-devops',
+                                             nexusRepositoryId: 'ms-iclab',
                                             packages: [[$class: 'MavenPackage',
                                                  mavenAssetList: [[classifier: '',
                                                                  extension: '',
@@ -91,24 +90,24 @@ def call() {
                     }
                 }
             }
-            //    stage('Create Release') {
-            //        //- Crear rama release cuando todos los stages anteriores estén correctamente ejecutados.
-            //        //- Este stage sólo debe estar disponible para la rama develop.
-            //        when {
-            //            branch 'develop'
-            //        }
-            //        steps {
-            //            script { STAGE = 'Create Release ' }
-            //            sh "echo 'gitCreateRelease'"
-            //            withCredentials([gitUsernamePassword(credentialsId: 'github-token')]) {
-            //                sh '''
-            //                    git checkout -b release/release-v$FINAL_VERSION
-            //                    git push origin release/release-v$FINAL_VERSION
-            //                   '''
-            //            }
-            //        //solo cuando es develop debo crear rama release.
-            //        }
-            //    }
+        //    stage('Create Release') {
+        //        //- Crear rama release cuando todos los stages anteriores estén correctamente ejecutados.
+        //        //- Este stage sólo debe estar disponible para la rama develop.
+        //        when {
+        //            branch 'develop'
+        //        }
+        //        steps {
+        //            script { STAGE = 'Create Release ' }
+        //            sh "echo 'gitCreateRelease'"
+        //            withCredentials([gitUsernamePassword(credentialsId: 'github-token')]) {
+        //                sh '''
+        //                    git checkout -b release/release-v$FINAL_VERSION
+        //                    git push origin release/release-v$FINAL_VERSION
+        //                   '''
+        //            }
+        //        //solo cuando es develop debo crear rama release.
+        //        }
+        //    }
         }
 
         post {
