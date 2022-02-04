@@ -42,16 +42,20 @@ def call(Map pipelineParameters) {
                 steps {
                     script { STAGE = 'test ' }
                     sh 'echo Test Curl'
-                    // sh "sleep 30 && curl -X GET 'http://localhost:8081/rest/mscovid/test?msg=testing'"
+                // sh "sleep 30 && curl -X GET 'http://localhost:8081/rest/mscovid/test?msg=testing'"
                 }
                 post {
                     success {
                         script {
                             STAGE = 'gitTagMaster '
                             sh 'echo "gitTagMaster"'
-                            sh 'git tag -a "v1-0-0" -m "Release 1-0-0"'
-                            sh 'git push origin "v1-0-0"'
-                            sh 'git show v1-0-0'
+                        }
+                        withCredentials([gitUsernamePassword(credentialsId: 'github-token')]) {
+                            sh '''
+                            git tag -a "v1-0-0" -m "Release 1-0-0"
+                            git push origin "v1-0-0"
+                            git show v1-0-0
+                            '''
                         }
                         script {
                             STAGE = 'gitMergeMaster '
