@@ -118,7 +118,7 @@ def call(Map args) {
                                     packages: [[$class: 'MavenPackage',
                                                 mavenAssetList: [[classifier: '',
                                                                 extension: '',
-                                                                filePath: 'build/DevOpsUsach2020-${POM_VERSION}.jar']],
+                                                                filePath: "build/DevOpsUsach2020-${POM_VERSION}.jar"]],
                                                 mavenCoordinate: [artifactId: 'DevOpsUsach2020',
                                                                 groupId: 'com.devopsusach2020',
                                                                 packaging: 'jar',
