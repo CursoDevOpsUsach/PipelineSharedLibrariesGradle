@@ -81,9 +81,9 @@ def call(Map args) {
                         }
                         withCredentials([gitUsernamePassword(credentialsId: 'github-token')]) {
                             sh '''
-                        git checkout main2
+                        git checkout main
                         git merge release/release-v1-0-0
-                        git push origin main2
+                        git push origin main
                         git tag
                         '''
                         }
@@ -93,9 +93,9 @@ def call(Map args) {
                         }
                         withCredentials([gitUsernamePassword(credentialsId: 'github-token')]) {
                             sh '''
-                        git checkout develop2
+                        git checkout develop
                         git merge release/release-v1-0-0
-                        git push origin main2
+                        git push origin develop
                         git tag
                         '''
                         }
