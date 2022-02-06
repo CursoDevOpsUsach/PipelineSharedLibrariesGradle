@@ -129,25 +129,7 @@ def call(Map args) {
                                                                 version: "${mavenPom.version}"]]]
                 }
             }
-           stage('Push Develop') {
-                               when {
-                    branch 'develop*'
-                }
-                steps {
-                    step {
-                        sh "echo 'Push Develop'"
-                        script {
-                            STAGE = 'gitPushDevelop '
-                            sh "echo 'gitPushDevelop'"
-                        }
-                        withCredentials([gitUsernamePassword(credentialsId: 'github-token')]) {
-                            sh '''
-                        git push origin develop
-                        '''
-                        }
-                    }
-                }
-            }
+
         //    stage('Create Release') {
         //        //- Crear rama release cuando todos los stages anteriores estén correctamente ejecutados.
         //        //- Este stage sólo debe estar disponible para la rama develop.
